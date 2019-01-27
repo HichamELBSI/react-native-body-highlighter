@@ -1,0 +1,16 @@
+{
+  "name": "react-native-body-highlighter",
+  "version": "1.0.2",
+  "main": "index.js",
+  "author": "HichamELBSI",
+  "license": "MIT",
+  "keywords": ["reactnative", "muscle", "body", "highlighter"],
+  "dependencies": {
+    "ramda": "^0.26.1"
+  },
+  "peerDependencies": {
+    "react": "^16.7.0",
+    "react-native": "^0.58.1",
+    "react-native-svg": "^9.0.5"
+  }
+}
