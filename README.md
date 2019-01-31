@@ -32,41 +32,22 @@ import { StyleSheet, Text, View } from "react-native";
 
 import Body from "react-native-body-highlighter";
 
+const exercices = [
+  {
+    name: "Bench press",
+    muscles: [
+      { slug: "chest", intensity: 1 },
+      { slug: "front-deltoids", intensity: 2 },
+      { slug: "triceps", intensity: 2 }
+    ]
+  }
+];
+
 export default class App extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <Body
-          scale={1}
-          data={[
-            // Back
-            { slug: "trapezius", intensity: 1 },
-            { slug: "upper-back", intensity: 1 },
-            { slug: "lower-back", intensity: 1 },
-            // Chest
-            { slug: "chest", intensity: 2 },
-            // Arms
-            { slug: "biceps", intensity: 1 },
-            { slug: "triceps", intensity: 1 },
-            { slug: "forearm", intensity: 2 },
-            { slug: "back-deltoids", intensity: 1 },
-            { slug: "front-deltoids", intensity: 1 },
-            // Abs
-            { slug: "abs", intensity: 1 },
-            { slug: "obliques", intensity: 1 },
-            // Legs
-            { slug: "adductor", intensity: 1 },
-            { slug: "hamstring", intensity: 1 },
-            { slug: "quadriceps", intensity: 1 },
-            { slug: "abductors", intensity: 1 },
-            { slug: "calves", intensity: 1 },
-            { slug: "gluteal", intensity: 1 },
-
-            // Others
-            { slug: "head", intensity: 0 },
-            { slug: "neck", intensity: 0 }
-          ]}
-        />
+        <Body scale={1} data={exercices[0].muscles} />
       </View>
     );
   }
@@ -100,23 +81,34 @@ const styles = StyleSheet.create({
 ## List of muscles
 
 ```Javascript
+// Back
 trapezius
 upper-back
 lower-back
+
+// Chest
 chest
+
+// Arms
 biceps
 triceps
 forearm
 back-deltoids
 front-deltoids
+
+// Abs
 abs
 obliques
+
+// Legs
 adductor
 hamstring
 quadriceps
 abductors
 calves
 gluteal
+
+// Head
 head
 neck
 ```
