@@ -1,10 +1,17 @@
 {
   "name": "react-native-body-highlighter",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "main": "index.js",
   "author": "HichamELBSI",
   "license": "MIT",
-  "keywords": ["reactnative", "muscle", "body", "highlighter"],
+  "keywords": [
+    "reactnative",
+    "muscle",
+    "body",
+    "highlighter",
+    "highlight",
+    "color"
+  ],
   "dependencies": {
     "ramda": "^0.26.1"
   },

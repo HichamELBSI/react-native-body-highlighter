@@ -9,8 +9,8 @@ import bodyBack from "./assets/bodyBack";
 const { Polygon } = Svg;
 
 const colorsIntensity = {
-  1: "#c44569",
-  2: "#f19066"
+  1: "#0984e3",
+  2: "#74b9ff"
 };
 
 class Body extends React.Component {
@@ -26,7 +26,7 @@ class Body extends React.Component {
       dataSource,
       this.props.data
     );
-    const coloredMuscles = innerData.map((d, index) =>
+    const coloredMuscles = innerData.map(d =>
       assoc(
         "color",
         colorsIntensity[this.props.data.find(e => e.slug === d.slug).intensity],
