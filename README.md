@@ -4,10 +4,6 @@
 
 > Simple body muscles highlighter for react-native.
 
-<div style="text-align: center;">
-<img src="./docs/screenshots/screenshot.jpeg" alt="body-highlighter" width="300"/>
-</div>
-
 ## Installation
 
 ```bash
@@ -26,49 +22,17 @@ Note: If you don't use `Expo`, ensure to add [react-native-svg](https://github.c
 
 The snippet below shows how the component can be used
 
-```javascript
-import React from "react";
-import { StyleSheet, Text, View } from "react-native";
-
-import Body from "react-native-body-highlighter";
-
-const exercices = [
-  {
-    name: "Bench press",
-    muscles: [
-      { slug: "chest", intensity: 1 },
-      { slug: "front-deltoids", intensity: 2 },
-      { slug: "triceps", intensity: 2 }
-    ]
-  }
-];
-
-export default class App extends React.Component {
-  render() {
-    return (
-      <View style={styles.container}>
-        <Body scale={1} data={exercices[0].muscles} />
-      </View>
-    );
-  }
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center"
-  }
-});
-```
+<div style="text-align: center;">
+<img src="./docs/screenshots/screenshot.png" alt="body-highlighter"/>
+</div>
 
 ## Props
 
-| Prop  | Required | Purpose                                    |
-| ----- | -------- | ------------------------------------------ |
-| data  | Yes      | (Array) Array of MuscleObject to highlight |
-| scale | No       | (Float) Defaults to 1                      |
+| Prop   | Required | Purpose                                      |
+| ------ | -------- | -------------------------------------------- |
+| data   | Yes      | (Array) Array of MuscleObject to highlight   |
+| colors | No       | (Array) Defaults to `['#0984e3', '#74b9ff']` |
+| scale  | No       | (Float) Defaults to 1                        |
 
 ## Muscle object model
 
@@ -76,7 +40,7 @@ const styles = StyleSheet.create({
 
 - #### MuscleName : Muscle name to highlight (See the list of available muscles below)
 
-- #### IntensityNumber : Color of highlight (0 = black, 1 = red, 2 = yellow)
+- #### IntensityNumber : Color of highlight
 
 ## List of muscles
 

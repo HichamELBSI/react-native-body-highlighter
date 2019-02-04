@@ -8,36 +8,27 @@ import bodyBack from "./assets/bodyBack";
 
 const { Polygon } = Svg;
 
-const colorsIntensity = {
-  1: "#0984e3",
-  2: "#74b9ff"
-};
+const colorsIntensity = ["#0984e3", "#74b9ff"];
 
 class Body extends React.Component {
   static defaultProps = {
-    scale: 1
+    scale: 1,
+    colors: colorsIntensity
   };
 
   comparison = (a, b) => a.slug === b.slug;
 
   mergedMuscles = dataSource => {
+    const { color, data } = this.props;
     const innerData = innerJoin(
       (x, y) => x.slug === y.slug,
       dataSource,
       this.props.data
     );
     const coloredMuscles = innerData.map(d =>
-      assoc(
-        "color",
-        colorsIntensity[this.props.data.find(e => e.slug === d.slug).intensity],
-        d
-      )
+      assoc("color", colors[data.find(e => e.slug === d.slug).intensity], d)
     );
-    const formattedMuscles = differenceWith(
-      this.comparison,
-      dataSource,
-      this.props.data
-    );
+    const formattedMuscles = differenceWith(this.comparison, dataSource, data);
     return [...formattedMuscles, ...coloredMuscles];
   };
 
@@ -50,7 +41,7 @@ class Body extends React.Component {
             id={muscle.slug}
             fill={
               muscle.intensity
-                ? colorsIntensity[muscle.intensity]
+                ? this.props.colors[muscle.intensity]
                 : muscle.color
             }
             points={points}
