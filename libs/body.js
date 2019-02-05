@@ -19,14 +19,14 @@ class Body extends React.Component {
   comparison = (a, b) => a.slug === b.slug;
 
   mergedMuscles = dataSource => {
-    const { color, data } = this.props;
+    const { colors, data } = this.props;
     const innerData = innerJoin(
       (x, y) => x.slug === y.slug,
       dataSource,
       this.props.data
     );
     const coloredMuscles = innerData.map(d =>
-      assoc("color", colors[data.find(e => e.slug === d.slug).intensity], d)
+      assoc("color", colors[data.find(e => e.slug === d.slug).intensity - 1], d)
     );
     const formattedMuscles = differenceWith(this.comparison, dataSource, data);
     return [...formattedMuscles, ...coloredMuscles];
