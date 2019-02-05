@@ -13,7 +13,9 @@ const colorsIntensity = ["#0984e3", "#74b9ff"];
 class Body extends React.Component {
   static defaultProps = {
     scale: 1,
-    colors: colorsIntensity
+    colors: colorsIntensity,
+    backOnly: false,
+    frontOnly: false
   };
 
   comparison = (a, b) => a.slug === b.slug;
@@ -52,7 +54,7 @@ class Body extends React.Component {
   );
 
   render() {
-    const { scale } = this.props;
+    const { scale, frontOnly, backOnly } = this.props;
 
     return (
       <View
@@ -61,8 +63,8 @@ class Body extends React.Component {
           transform: [{ scale }]
         }}
       >
-        {this.renderBodySvg(bodyFront)}
-        {this.renderBodySvg(bodyBack)}
+        {!backOnly && this.renderBodySvg(bodyFront)}
+        {!frontOnly && this.renderBodySvg(bodyBack)}
       </View>
     );
   }
