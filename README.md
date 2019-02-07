@@ -28,13 +28,14 @@ The snippet below shows how the component can be used
 
 ## Props
 
-| Prop      | Required | Purpose                                               |
-| --------- | -------- | ----------------------------------------------------- |
-| data      | Yes      | (Array) Array of MuscleObject to highlight            |
-| colors    | No       | (Array) Defaults to `['#0984e3', '#74b9ff']`          |
-| frontOnly | No       | (Boolean) Display only the front, Defaults to `false` |
-| backOnly  | No       | (Boolean) Display only the back, Defaults to `false`  |
-| scale     | No       | (Float) Defaults to `1`                               |
+| Prop          | Required | Purpose                                                        |
+| ------------- | -------- | -------------------------------------------------------------- |
+| data          | Yes      | (Array) Array of MuscleObject to highlight                     |
+| onMusclePress | No       | (Func) (muscle) => {} Callback called when a user tap a muscle |
+| colors        | No       | (Array) Defaults to `['#0984e3', '#74b9ff']`                   |
+| frontOnly     | No       | (Boolean) Display only the front, Defaults to `false`          |
+| backOnly      | No       | (Boolean) Display only the back, Defaults to `false`           |
+| scale         | No       | (Float) Defaults to `1`                                        |
 
 ## Muscle object model
 
