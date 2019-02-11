@@ -42,13 +42,18 @@ class Body extends React.Component {
     return color;
   };
 
+  handleMusclePress = muscle => {
+    const { onMusclePress } = this.props;
+    if (onMusclePress) onMusclePress(muscle);
+  };
+
   renderBodySvg = data => (
     <Svg height="200" width="100">
       {this.mergedMuscles(data).map(muscle =>
         muscle.pointsArray.map(points => (
           <Polygon
             key={points}
-            onPress={() => this.props.onMusclePress(muscle)}
+            onPress={() => this.handleMusclePress(muscle)}
             id={muscle.slug}
             fill={this.getColorToFill(muscle)}
             points={points}
