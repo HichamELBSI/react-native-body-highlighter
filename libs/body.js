@@ -8,13 +8,11 @@ import {
   StyleSheet,
   YellowBox
 } from "react-native";
-import { Svg } from "react-native-svg";
+import Svg, { Polygon, Path } from "react-native-svg";
 import { innerJoin, assoc, differenceWith } from "ramda";
 
 import bodyFront from "./assets/bodyFront";
 import bodyBack from "./assets/bodyBack";
-
-const { Polygon, Path } = Svg;
 
 const colorsIntensity = ["#0984e3", "#74b9ff"];
 
