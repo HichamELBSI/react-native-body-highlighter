@@ -1,6 +1,6 @@
 {
   "name": "react-native-body-highlighter",
-  "version": "1.1.1",
+  "version": "2.0.0",
   "main": "index.js",
   "author": "HichamELBSI",
   "license": "MIT",
@@ -16,11 +16,18 @@
     "svg"
   ],
   "dependencies": {
+    "react-native-svg": "^9.5.3",
     "ramda": "^0.26.1"
   },
   "peerDependencies": {
     "react": "^16.8.3",
-    "react-native": "^0.59.8",
-    "react-native-svg": "^9.4.0"
+    "react-native": "^0.59.8"
+  },
+  "devDependencies": {
+    "@types/ramda": "^0.26.16",
+    "@types/react": "^16.8.23",
+    "@types/react-native": "^0.60.2",
+    "react-native-typescript-transformer": "^1.2.12",
+    "typescript": "^3.5.3"
   }
 }

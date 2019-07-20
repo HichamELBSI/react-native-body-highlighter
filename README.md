@@ -44,7 +44,7 @@ The snippet below shows how the component can be used
 
 - #### MuscleName : Muscle name to highlight (See the list of available muscles below)
 
-- #### IntensityNumber : Color of highlight
+- #### IntensityNumber : Color intensity (if colors props is set: from 1 to colors.length + 1. If not, 1 or 2)
 
 ## List of muscles
 
