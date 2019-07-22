@@ -1,6 +1,7 @@
 # react-native-body-highlighter
 
 [![npm](https://img.shields.io/npm/v/react-native-body-highlighter.svg)](https://www.npmjs.com/package/react-native-body-highlighter) [![Downloads](https://img.shields.io/npm/dt/react-native-body-highlighter.svg)](https://www.npmjs.com/package/react-native-body-highlighter) [![Licence](https://img.shields.io/npm/l/react-native-body-highlighter.svg)](https://www.npmjs.com/package/react-native-body-highlighter)
+[![CircleCI](https://circleci.com/gh/HichamELBSI/react-native-body-highlighter.svg?style=svg)](https://circleci.com/gh/HichamELBSI/react-native-body-highlighter)
 
 > Simple body muscles highlighter for react-native.
 
