@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { memo, useEffect, useState, useCallback } from "react";
 import {
   View,
   TouchableWithoutFeedback,
@@ -7,7 +7,7 @@ import {
   StyleSheet
 } from "react-native";
 import Svg, { Polygon, Path } from "react-native-svg";
-import { innerJoin, assoc, differenceWith } from "ramda";
+import differenceWith from "ramda/src/differenceWith";
 
 import bodyFront from "./assets/bodyFront";
 import bodyBack from "./assets/bodyBack";
@@ -49,19 +49,26 @@ const Body = ({
         "props 'onMusclePress' is disable if props 'zoomOnPress' is set to true"
       );
     }
-  });
+  }, [onMusclePress, zoomOnPress]);
 
-  const mergedMuscles = (dataSource: ReadonlyArray<MuscleT>) => {
-    const innerData = innerJoin((x, y) => x.slug === y.slug, dataSource, data);
-    const coloredMuscles = innerData.map(d => {
-      const muscle = data.find(e => e.slug === d.slug);
-      let colorIntensity = 1;
-      if (muscle && muscle.intensity) colorIntensity = muscle.intensity;
-      return assoc("color", colors[colorIntensity - 1], d);
-    });
-    const formattedMuscles = differenceWith(comparison, dataSource, data);
-    return [...formattedMuscles, ...coloredMuscles];
-  };
+  const mergedMuscles = useCallback(
+    (dataSource: ReadonlyArray<MuscleT>) => {
+      const innerData = data
+        .map(d => {
+          return dataSource.find(t => t.slug === d.slug);
+        })
+        .filter(Boolean);
+      const coloredMuscles = innerData.map((d: any) => {
+        const muscle = data.find(e => e.slug === d.slug);
+        let colorIntensity = 1;
+        if (muscle && muscle.intensity) colorIntensity = muscle.intensity;
+        return { ...d, color: colors[colorIntensity - 1] };
+      });
+      const formattedMuscles = differenceWith(comparison, dataSource, data);
+      return [...formattedMuscles, ...coloredMuscles];
+    },
+    [data, colors]
+  );
 
   const getColorToFill = (muscle: MuscleT) => {
     let color;
@@ -80,9 +87,9 @@ const Body = ({
   const renderBodySvg = (data: ReadonlyArray<MuscleT>) => (
     <Svg height="200" width="100">
       {mergedMuscles(data).map(
-        muscle =>
+        (muscle: MuscleT) =>
           muscle.pointsArray &&
-          muscle.pointsArray.map(points => (
+          muscle.pointsArray.map((points: string) => (
             <Polygon
               key={points}
               onPress={() => handleMusclePress(muscle)}
@@ -164,4 +171,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default Body;
+export default memo(Body);
