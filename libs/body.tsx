@@ -87,20 +87,26 @@ const Body = ({
   const renderBodySvg = (data: ReadonlyArray<MuscleT>) => (
     <Svg height={200 * scale} width={100 * scale}>
       {mergedMuscles(data).map(
-        (muscle: MuscleT) =>
-          muscle.pointsArray &&
-          muscle.pointsArray.map((points: string) => {
-            const scaledPoints = points.split(' ').map(p => `${parseFloat(p) * scale}`).join(' ');
-            return (
-                <Polygon
-                    key={scaledPoints}
-                    onPress={() => handleMusclePress(muscle)}
-                    id={muscle.slug}
-                    fill={getColorToFill(muscle)}
-                    points={scaledPoints}
-                />
-            );
-          })
+        (muscle: MuscleT) => {
+           if (muscle.pointsArray) {
+             muscle.pointsArray = muscle.pointsArray.map(
+                 (points: string) => points.split(' ').map(p => `${parseFloat(p) * scale}`).join(' ')
+             );
+
+             return muscle.pointsArray.map((points: string) => {
+               return (
+                   <Polygon
+                       key={points}
+                       onPress={() => handleMusclePress(muscle)}
+                       id={muscle.slug}
+                       fill={getColorToFill(muscle)}
+                       points={points}
+                   />
+               );
+             });
+           }
+        }
+
       )}
     </Svg>
   );
@@ -113,7 +119,6 @@ const Body = ({
         <View
           style={{
             flexDirection: "row",
-            transform: [{ scale }]
           }}
         >
           {!backOnly && renderBodySvg(bodyFront)}
