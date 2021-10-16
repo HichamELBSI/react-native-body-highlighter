@@ -33,41 +33,41 @@ const colorsIntensity = ["#0984e3", "#74b9ff"];
 const comparison = (a: MuscleT, b: MuscleT) => a.slug === b.slug;
 
 const Body = ({
-                onMusclePress,
-                zoomOnPress,
-                colors,
-                data,
-                scale,
-                frontOnly,
-                backOnly
-              }: Props) => {
+  onMusclePress,
+  zoomOnPress,
+  colors,
+  data,
+  scale,
+  frontOnly,
+  backOnly
+}: Props) => {
   const [openInModal, setOpenInModal] = useState(false);
 
   useEffect(() => {
     if (onMusclePress && zoomOnPress) {
       console.warn(
-          "props 'onMusclePress' is disable if props 'zoomOnPress' is set to true"
+        "props 'onMusclePress' is disable if props 'zoomOnPress' is set to true"
       );
     }
   }, [onMusclePress, zoomOnPress]);
 
   const mergedMuscles = useCallback(
-      (dataSource: ReadonlyArray<MuscleT>) => {
-        const innerData = data
-            .map(d => {
-              return dataSource.find(t => t.slug === d.slug);
-            })
-            .filter(Boolean);
-        const coloredMuscles = innerData.map((d: any) => {
-          const muscle = data.find(e => e.slug === d.slug);
-          let colorIntensity = 1;
-          if (muscle && muscle.intensity) colorIntensity = muscle.intensity;
-          return { ...d, color: colors[colorIntensity - 1] };
-        });
-        const formattedMuscles = differenceWith(comparison, dataSource, data);
-        return [...formattedMuscles, ...coloredMuscles];
-      },
-      [data, colors]
+    (dataSource: ReadonlyArray<MuscleT>) => {
+      const innerData = data
+        .map(d => {
+          return dataSource.find(t => t.slug === d.slug);
+        })
+        .filter(Boolean);
+      const coloredMuscles = innerData.map((d: any) => {
+        const muscle = data.find(e => e.slug === d.slug);
+        let colorIntensity = 1;
+        if (muscle && muscle.intensity) colorIntensity = muscle.intensity;
+        return { ...d, color: colors[colorIntensity - 1] };
+      });
+      const formattedMuscles = differenceWith(comparison, dataSource, data);
+      return [...formattedMuscles, ...coloredMuscles];
+    },
+    [data, colors]
   );
 
   const getColorToFill = (muscle: MuscleT) => {
@@ -85,67 +85,67 @@ const Body = ({
   };
 
   const renderBodySvg = (data: ReadonlyArray<MuscleT>) => (
-      <Svg height={200 * scale} width={100 * scale}>
-        {mergedMuscles(data).map(
-            (muscle: MuscleT) =>
-                muscle.pointsArray &&
-                muscle.pointsArray.map((points: string) => {
-                  const scaledPoints = points.split(' ').map(p => `${parseFloat(p) * scale}`).join(' ');
-
-                  return (
-                      <Polygon
-                          key={scaledPoints}
-                          onPress={() => handleMusclePress(muscle)}
-                          id={muscle.slug}
-                          fill={getColorToFill(muscle)}
-                          points={scaledPoints}
-                      />
-                  );
-                })
-        )}
-      </Svg>
+    <Svg height={200 * scale} width={100 * scale}>
+      {mergedMuscles(data).map(
+        (muscle: MuscleT) =>
+          muscle.pointsArray &&
+          muscle.pointsArray.map((points: string) => {
+            const scaledPoints = points.split(' ').map(p => `${parseFloat(p) * scale}`).join(' ');
+            return (
+                <Polygon
+                    key={scaledPoints}
+                    onPress={() => handleMusclePress(muscle)}
+                    id={muscle.slug}
+                    fill={getColorToFill(muscle)}
+                    points={scaledPoints}
+                />
+            );
+          })
+      )}
+    </Svg>
   );
 
   return (
-      <TouchableWithoutFeedback
-          onPress={() => zoomOnPress && setOpenInModal(!openInModal)}
-      >
-        <View>
-          <View
-              style={{
-                flexDirection: "row",
-              }}
-          >
-            {!backOnly && renderBodySvg(bodyFront)}
-            {!frontOnly && renderBodySvg(bodyBack)}
-          </View>
-          <Modal
-              hardwareAccelerated
-              presentationStyle="fullScreen"
-              animationType="none"
-              transparent={false}
-              visible={openInModal}
-          >
-            <View style={styles.modalContainer}>
-              <TouchableOpacity
-                  style={styles.closeModal}
-                  onPress={() => setOpenInModal(!openInModal)}
-              >
-                <Svg height="24" width="24">
-                  <Path
-                      d="M24 20.188l-8.315-8.209 8.2-8.282-3.697-3.697-8.212 8.318-8.31-8.203-3.666 3.666 8.321 8.24-8.206 8.313 3.666 3.666 8.237-8.318 8.285 8.203z"
-                      fill="black"
-                  />
-                </Svg>
-              </TouchableOpacity>
-              <View style={styles.modalContent}>
-                {!backOnly && renderBodySvg(bodyFront)}
-                {!frontOnly && renderBodySvg(bodyBack)}
-              </View>
-            </View>
-          </Modal>
+    <TouchableWithoutFeedback
+      onPress={() => zoomOnPress && setOpenInModal(!openInModal)}
+    >
+      <View>
+        <View
+          style={{
+            flexDirection: "row",
+            transform: [{ scale }]
+          }}
+        >
+          {!backOnly && renderBodySvg(bodyFront)}
+          {!frontOnly && renderBodySvg(bodyBack)}
         </View>
-      </TouchableWithoutFeedback>
+        <Modal
+          hardwareAccelerated
+          presentationStyle="fullScreen"
+          animationType="none"
+          transparent={false}
+          visible={openInModal}
+        >
+          <View style={styles.modalContainer}>
+            <TouchableOpacity
+              style={styles.closeModal}
+              onPress={() => setOpenInModal(!openInModal)}
+            >
+              <Svg height="24" width="24">
+                <Path
+                  d="M24 20.188l-8.315-8.209 8.2-8.282-3.697-3.697-8.212 8.318-8.31-8.203-3.666 3.666 8.321 8.24-8.206 8.313 3.666 3.666 8.237-8.318 8.285 8.203z"
+                  fill="black"
+                />
+              </Svg>
+            </TouchableOpacity>
+            <View style={styles.modalContent}>
+              {!backOnly && renderBodySvg(bodyFront)}
+              {!frontOnly && renderBodySvg(bodyBack)}
+            </View>
+          </View>
+        </Modal>
+      </View>
+    </TouchableWithoutFeedback>
   );
 };
 
