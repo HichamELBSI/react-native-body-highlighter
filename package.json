@@ -23,8 +23,8 @@
     "react-native-svg": "^9.5.3"
   },
   "peerDependencies": {
-    "react": "^16.8.3",
-    "react-native": "^0.59.8"
+    "react":"*",
+    "react-native": "*"
   },
   "devDependencies": {
     "@types/jest": "^24.0.15",
