@@ -1,7 +1,7 @@
 {
   "name": "react-native-body-highlighter",
-  "version": "2.0.2",
-  "main": "index.js",
+  "version": "2.1.0",
+  "main": "index.tsx",
   "author": "HichamELBSI",
   "license": "MIT",
   "keywords": [
@@ -23,7 +23,7 @@
     "react-native-svg": "^13.1.0"
   },
   "peerDependencies": {
-    "react":"*",
+    "react": "*",
     "react-native": "*"
   },
   "devDependencies": {

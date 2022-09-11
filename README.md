@@ -3,7 +3,11 @@
 [![npm](https://img.shields.io/npm/v/react-native-body-highlighter.svg)](https://www.npmjs.com/package/react-native-body-highlighter) [![Downloads](https://img.shields.io/npm/dt/react-native-body-highlighter.svg)](https://www.npmjs.com/package/react-native-body-highlighter)
 [![CircleCI](https://circleci.com/gh/HichamELBSI/react-native-body-highlighter.svg?style=svg)](https://circleci.com/gh/HichamELBSI/react-native-body-highlighter)
 
-> Simple body muscles highlighter for react-native.
+> SVG human body muscles highlighter for react-native.
+
+<div style="text-align:center;width:100%;">
+  <img src="./docs/screenshots/example.jpg" width="150" alt="body-highlighter" />
+</div>
 
 ## Installation
 
@@ -23,21 +27,34 @@ Note: If you don't use `Expo`, ensure to add [react-native-svg](https://github.c
 
 The snippet below shows how the component can be used
 
-<div style="text-align: center;">
-<img src="./docs/screenshots/screenshot.png" alt="body-highlighter"/>
-</div>
+```jsx
+import Body from "react-native-body-highlighter";
+
+const data = [
+  { slug: "chest", intensity: 1 },
+  { slug: "abs", intensity: 2 },
+];
+
+export default function App() {
+  return (
+    <View>
+      <Body data={data} />
+    </View>
+  );
+}
+```
 
 ## Props
 
-| Prop          | Required | Purpose                                                                                                |
-| ------------- | -------- | ------------------------------------------------------------------------------------------------------ |
-| data          | Yes      | (Array) Array of MuscleObject to highlight                                                             |
-| onMusclePress | No       | (Func) (muscle) => {} Callback called when a user tap a muscle, disabled if zoomOnPress is set to true |
-| colors        | No       | (Array) Defaults to `['#0984e3', '#74b9ff']`                                                           |
-| frontOnly     | No       | (Boolean) Display only the front, Defaults to `false`                                                  |
-| backOnly      | No       | (Boolean) Display only the back, Defaults to `false`                                                   |
-| zoomOnPress   | No       | (Boolean) Defaults to false                                                                            |
-| scale         | No       | (Float) Defaults to `1`                                                                                |
+| Prop          | Required | Purpose                                                                                                              |
+| ------------- | -------- | -------------------------------------------------------------------------------------------------------------------- |
+| data          | Yes      | (Array) Array of `MuscleObject` to highlight                                                                         |
+| onMusclePress | No       | (Func) (muscle: MuscleObject) => {} Callback called when a user tap a muscle, disabled if zoomOnPress is set to true |
+| colors        | No       | (Array) Defaults to `['#0984e3', '#74b9ff']`                                                                         |
+| frontOnly     | No       | (Boolean) Display only the front, Defaults to `false`                                                                |
+| backOnly      | No       | (Boolean) Display only the back, Defaults to `false`                                                                 |
+| zoomOnPress   | No       | (Boolean) Defaults to false                                                                                          |
+| scale         | No       | (Float) Defaults to `1`                                                                                              |
 
 ## Muscle object model
 
@@ -45,7 +62,7 @@ The snippet below shows how the component can be used
 
 - #### MuscleName : Muscle name to highlight (See the list of available muscles below)
 
-- #### IntensityNumber : Color intensity (if colors props is set: from 1 to colors.length + 1. If not, 1 or 2)
+- #### IntensityNumber : Color intensity (if the `colors` property is set: from 1 to `colors.length` + 1. If not, intensity can be 1 or 2)
 
 ## List of muscles
 
