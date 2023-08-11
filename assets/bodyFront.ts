@@ -1,4 +1,6 @@
-export default [
+import { Muscle } from "..";
+
+const bodyFront : Muscle[] = [
   // Chest
   {
     slug: "chest",
@@ -136,3 +138,5 @@ export default [
     ],
   },
 ];
+
+export default bodyFront;
