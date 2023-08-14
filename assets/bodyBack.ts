@@ -1,6 +1,6 @@
-import { Path } from "react-native-svg";
+import { Muscle } from "..";
 
-export default [
+const bodyBack : Muscle[] = [
   // Head
   {
     slug: "head",
@@ -153,3 +153,5 @@ export default [
     pointsArray: ["74.4680851 202.553191 72.3404255 219.148936 74.0425532 222.12766 76.1702128 217.446809"],
   },
 ];
+
+export default bodyBack;

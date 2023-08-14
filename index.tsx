@@ -6,10 +6,37 @@ import differenceWith from "ramda/src/differenceWith";
 import bodyFront from "./assets/bodyFront";
 import bodyBack from "./assets/bodyBack";
 
+export type Slug =
+	| "chest"
+	| "obliques"
+	| "head"
+	| "trapezius"
+	| "abs"
+	| "gluteal"
+	| "adductor"
+	| "calves"
+	| "quadriceps"
+	| "back-deltoids"
+	| "knees"
+	| "hamstring"
+	| "biceps"
+	| "triceps"
+	| "neck"
+	| "upper-back"
+	| "lower-back"
+	| "forearm"
+	| "front-deltoids"
+	| "abductors"
+	// The following do not match the existing naming convention
+	| "Left_Soleus"
+	| "Right_Soleus"
+	| "Left_Peroneus_Longus"
+	| "Right_Peroneus_Longus";
+
 export interface Muscle {
   intensity?: number;
   color: string;
-  slug: string;
+  slug: Slug;
   pointsArray?: string[];
 }
 
@@ -41,10 +68,10 @@ const Body = ({ onMusclePress, zoomOnPress, colors, data, scale, frontOnly, back
           return dataSource.find((t) => t.slug === d.slug);
         })
         .filter(Boolean);
-      const coloredMuscles = innerData.map((d: any) => {
-        const muscle = data.find((e) => e.slug === d.slug);
+      const coloredMuscles = innerData.map((d) => {
+        const muscle = data.find((e) => e.slug === d?.slug);
         let colorIntensity = 1;
-        if (muscle && muscle.intensity) colorIntensity = muscle.intensity;
+        if (muscle?.intensity) colorIntensity = muscle.intensity;
         return { ...d, color: colors[colorIntensity - 1] };
       });
       const formattedMuscles = differenceWith(comparison, dataSource, data);
