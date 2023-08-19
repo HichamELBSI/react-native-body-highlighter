@@ -1,48 +1,52 @@
 import React, { memo, useEffect, useState, useCallback } from "react";
-import { View, TouchableWithoutFeedback, Modal, TouchableOpacity, StyleSheet } from "react-native";
+import {
+  View,
+  TouchableWithoutFeedback,
+  Modal,
+  TouchableOpacity,
+  StyleSheet,
+} from "react-native";
 import Svg, { Polygon, Path } from "react-native-svg";
 import differenceWith from "ramda/src/differenceWith";
 
-import bodyFront from "./assets/bodyFront";
-import bodyBack from "./assets/bodyBack";
+import { bodyFront } from "./assets/bodyFront";
+import { bodyBack } from "./assets/bodyBack";
+import { SvgWrapper } from "./components/SvgWrapper";
 
 export type Slug =
-	| "chest"
-	| "obliques"
-	| "head"
-	| "trapezius"
-	| "abs"
-	| "gluteal"
-	| "adductor"
-	| "calves"
-	| "quadriceps"
-	| "back-deltoids"
-	| "knees"
-	| "hamstring"
-	| "biceps"
-	| "triceps"
-	| "neck"
-	| "upper-back"
-	| "lower-back"
-	| "forearm"
-	| "front-deltoids"
-	| "abductors"
-	// The following do not match the existing naming convention
-	| "Left_Soleus"
-	| "Right_Soleus"
-	| "Left_Peroneus_Longus"
-	| "Right_Peroneus_Longus";
+  | "abs"
+  | "adductors"
+  | "ankles"
+  | "biceps"
+  | "calves"
+  | "chest"
+  | "deltoids"
+  | "deltoids"
+  | "feet"
+  | "forearm"
+  | "gluteal"
+  | "hamstring"
+  | "hands"
+  | "hair"
+  | "head"
+  | "knees"
+  | "lower-back"
+  | "neck"
+  | "obliques"
+  | "quadriceps"
+  | "tibialis"
+  | "trapezius"
+  | "triceps"
+  | "upper-back";
 
 export interface Muscle {
   intensity?: number;
   color: string;
   slug: Slug;
-  pointsArray?: string[];
+  pathArray?: string[];
 }
 
 type Props = {
-  onMusclePress?: (muscle: Muscle) => void;
-  zoomOnPress: boolean;
   colors: ReadonlyArray<string>;
   data: ReadonlyArray<Muscle>;
   scale: number;
@@ -52,14 +56,8 @@ type Props = {
 
 const comparison = (a: Muscle, b: Muscle) => a.slug === b.slug;
 
-const Body = ({ onMusclePress, zoomOnPress, colors, data, scale, frontOnly, backOnly }: Props) => {
+const Body = ({ colors, data, scale, frontOnly, backOnly }: Props) => {
   const [openInModal, setOpenInModal] = useState(false);
-
-  useEffect(() => {
-    if (onMusclePress && zoomOnPress) {
-      console.warn("The property 'onMusclePress' will be disabled if 'zoomOnPress' is set to true.");
-    }
-  }, [onMusclePress, zoomOnPress]);
 
   const mergedMuscles = useCallback(
     (dataSource: ReadonlyArray<Muscle>) => {
@@ -68,13 +66,16 @@ const Body = ({ onMusclePress, zoomOnPress, colors, data, scale, frontOnly, back
           return dataSource.find((t) => t.slug === d.slug);
         })
         .filter(Boolean);
+
       const coloredMuscles = innerData.map((d) => {
         const muscle = data.find((e) => e.slug === d?.slug);
         let colorIntensity = 1;
         if (muscle?.intensity) colorIntensity = muscle.intensity;
         return { ...d, color: colors[colorIntensity - 1] };
       });
+
       const formattedMuscles = differenceWith(comparison, dataSource, data);
+
       return [...formattedMuscles, ...coloredMuscles];
     },
     [data, colors]
@@ -88,70 +89,51 @@ const Body = ({ onMusclePress, zoomOnPress, colors, data, scale, frontOnly, back
     return color;
   };
 
-  const handleMusclePress = (muscle: Muscle) => {
-    if (onMusclePress && !zoomOnPress) onMusclePress(muscle);
-
-    if (zoomOnPress && !openInModal) setOpenInModal(!openInModal);
+  const renderBodySvg = (data: ReadonlyArray<Muscle>) => {
+    const viewBox = frontOnly
+      ? "0 0 1448 1448"
+      : backOnly
+      ? "724 0 1448 1448"
+      : "0 0 1448 1448";
+    return (
+      <SvgWrapper
+        frontOnly={frontOnly}
+        backOnly={backOnly}
+        viewBox={viewBox}
+        height={200 * scale}
+        width={200 * scale}
+      >
+        {mergedMuscles(data).map((muscle: any) => {
+          if (muscle.pathArray) {
+            return muscle.pathArray.map((path: string) => {
+              return (
+                <Path
+                  key={path}
+                  id={muscle.slug}
+                  fill={getColorToFill(muscle)}
+                  d={path}
+                />
+              );
+            });
+          }
+        })}
+      </SvgWrapper>
+    );
   };
 
-  const renderBodySvg = (data: ReadonlyArray<Muscle>) => (
-    <Svg height={200 * scale} width={100 * scale}>
-      {mergedMuscles(data).map((muscle: Muscle) => {
-        if (muscle.pointsArray) {
-          const newPointsArray = muscle.pointsArray.map((points: string) =>
-            points
-              .split(" ")
-              .map((p) => `${parseFloat(p) * scale}`)
-              .join(" ")
-          );
-
-          return newPointsArray.map((points: string) => {
-            return (
-              <Polygon
-                key={points}
-                onPress={() => handleMusclePress(muscle)}
-                id={muscle.slug}
-                fill={getColorToFill(muscle)}
-                points={points}
-              />
-            );
-          });
-        }
-      })}
-    </Svg>
-  );
-
   return (
-    <TouchableWithoutFeedback onPress={() => zoomOnPress && setOpenInModal(!openInModal)}>
-      <View>
-        <View style={styles.bodyContainer}>
+    <View>
+      <View style={styles.bodyContainer}>
+        <View style={{ width: 0 }}>
           {!backOnly && renderBodySvg(bodyFront)}
+        </View>
+        <View
+          style={{ width: frontOnly || backOnly ? 100 * scale : undefined }}
+        >
           {!frontOnly && renderBodySvg(bodyBack)}
         </View>
-        <Modal
-          hardwareAccelerated
-          presentationStyle="fullScreen"
-          animationType="none"
-          transparent={false}
-          visible={openInModal}
-        >
-          <View style={styles.modalContainer}>
-            <TouchableOpacity style={styles.closeModal} onPress={() => setOpenInModal(!openInModal)}>
-              <Svg height="24" width="24">
-                <Path
-                  d="M24 20.188l-8.315-8.209 8.2-8.282-3.697-3.697-8.212 8.318-8.31-8.203-3.666 3.666 8.321 8.24-8.206 8.313 3.666 3.666 8.237-8.318 8.285 8.203z"
-                  fill="black"
-                />
-              </Svg>
-            </TouchableOpacity>
-            <View style={styles.modalContent}>
-              {!backOnly && renderBodySvg(bodyFront)}
-              {!frontOnly && renderBodySvg(bodyBack)}
-            </View>
-          </View>
-        </Modal>
       </View>
-    </TouchableWithoutFeedback>
+    </View>
   );
 };
 
@@ -166,20 +148,6 @@ Body.defaultProps = {
 const styles = StyleSheet.create({
   bodyContainer: {
     flexDirection: "row",
-  },
-  modalContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  modalContent: {
-    transform: [{ scale: 2 }],
-    flexDirection: "row",
-  },
-  closeModal: {
-    position: "absolute",
-    top: 30,
-    right: 10,
   },
 });
 
