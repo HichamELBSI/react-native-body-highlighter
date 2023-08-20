@@ -82,7 +82,6 @@ const styles = StyleSheet.create({
 | onBodyPartPress | No       | `Func` - (bodyPart: BodyPartObject) => {} Callback called when a user tap a body part |
 | colors          | No       | `String[]` - Defaults to `['#0984e3', '#74b9ff']`                                     |
 | side            | No       | `String` - Can be "back" or "front" Display only the front, Defaults to `front`       |
-| backOnly        | No       | (Boolean) Display only the back, Defaults to `false`                                  |
 | scale           | No       | (Float) Defaults to `1`                                                               |
 
 ## v2.X.X Props
