@@ -1,12 +1,6 @@
-import React, { memo, useEffect, useState, useCallback } from "react";
-import {
-  View,
-  TouchableWithoutFeedback,
-  Modal,
-  TouchableOpacity,
-  StyleSheet,
-} from "react-native";
-import Svg, { Polygon, Path } from "react-native-svg";
+import React, { memo, useState, useCallback } from "react";
+import { View, StyleSheet } from "react-native";
+import { Path } from "react-native-svg";
 import differenceWith from "ramda/src/differenceWith";
 
 import { bodyFront } from "./assets/bodyFront";
@@ -57,8 +51,6 @@ type Props = {
 const comparison = (a: Muscle, b: Muscle) => a.slug === b.slug;
 
 const Body = ({ colors, data, scale, frontOnly, backOnly }: Props) => {
-  const [openInModal, setOpenInModal] = useState(false);
-
   const mergedMuscles = useCallback(
     (dataSource: ReadonlyArray<Muscle>) => {
       const innerData = data
