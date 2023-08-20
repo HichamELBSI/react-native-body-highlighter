@@ -1,5 +1,4 @@
-import React, { memo, useState, useCallback } from "react";
-import { View, StyleSheet } from "react-native";
+import React, { memo, useCallback } from "react";
 import { Path } from "react-native-svg";
 import differenceWith from "ramda/src/differenceWith";
 
@@ -33,7 +32,7 @@ export type Slug =
   | "triceps"
   | "upper-back";
 
-export interface Muscle {
+export interface BodyPart {
   intensity?: number;
   color: string;
   slug: Slug;
@@ -42,67 +41,58 @@ export interface Muscle {
 
 type Props = {
   colors: ReadonlyArray<string>;
-  data: ReadonlyArray<Muscle>;
+  data: ReadonlyArray<BodyPart>;
   scale: number;
   frontOnly: boolean;
   backOnly: boolean;
+  side: "front" | "back";
+  onBodyPartPress: (b: BodyPart) => void;
 };
 
-const comparison = (a: Muscle, b: Muscle) => a.slug === b.slug;
+const comparison = (a: BodyPart, b: BodyPart) => a.slug === b.slug;
 
-const Body = ({ colors, data, scale, frontOnly, backOnly }: Props) => {
-  const mergedMuscles = useCallback(
-    (dataSource: ReadonlyArray<Muscle>) => {
+const Body = ({ colors, data, scale, side, onBodyPartPress }: Props) => {
+  const mergedBodyParts = useCallback(
+    (dataSource: ReadonlyArray<BodyPart>) => {
       const innerData = data
         .map((d) => {
           return dataSource.find((t) => t.slug === d.slug);
         })
         .filter(Boolean);
 
-      const coloredMuscles = innerData.map((d) => {
-        const muscle = data.find((e) => e.slug === d?.slug);
+      const coloredBodyParts = innerData.map((d) => {
+        const bodyPart = data.find((e) => e.slug === d?.slug);
         let colorIntensity = 1;
-        if (muscle?.intensity) colorIntensity = muscle.intensity;
+        if (bodyPart?.intensity) colorIntensity = bodyPart.intensity;
         return { ...d, color: colors[colorIntensity - 1] };
       });
 
-      const formattedMuscles = differenceWith(comparison, dataSource, data);
+      const formattedBodyParts = differenceWith(comparison, dataSource, data);
 
-      return [...formattedMuscles, ...coloredMuscles];
+      return [...formattedBodyParts, ...coloredBodyParts];
     },
     [data, colors]
   );
 
-  const getColorToFill = (muscle: Muscle) => {
+  const getColorToFill = (bodyPart: BodyPart) => {
     let color;
-    if (muscle.intensity) color = colors[muscle.intensity];
-    else color = muscle.color;
-
+    if (bodyPart.intensity) color = colors[bodyPart.intensity];
+    else color = bodyPart.color;
     return color;
   };
 
-  const renderBodySvg = (data: ReadonlyArray<Muscle>) => {
-    const viewBox = frontOnly
-      ? "0 0 1448 1448"
-      : backOnly
-      ? "724 0 1448 1448"
-      : "0 0 1448 1448";
+  const renderBodySvg = (data: ReadonlyArray<BodyPart>) => {
     return (
-      <SvgWrapper
-        frontOnly={frontOnly}
-        backOnly={backOnly}
-        viewBox={viewBox}
-        height={200 * scale}
-        width={200 * scale}
-      >
-        {mergedMuscles(data).map((muscle: any) => {
-          if (muscle.pathArray) {
-            return muscle.pathArray.map((path: string) => {
+      <SvgWrapper side={side} scale={scale}>
+        {mergedBodyParts(data).map((bodyPart: any) => {
+          if (bodyPart.pathArray) {
+            return bodyPart.pathArray.map((path: string) => {
               return (
                 <Path
                   key={path}
-                  id={muscle.slug}
-                  fill={getColorToFill(muscle)}
+                  onPress={() => onBodyPartPress && onBodyPartPress(bodyPart)}
+                  id={bodyPart.slug}
+                  fill={getColorToFill(bodyPart)}
                   d={path}
                 />
               );
@@ -113,34 +103,14 @@ const Body = ({ colors, data, scale, frontOnly, backOnly }: Props) => {
     );
   };
 
-  return (
-    <View>
-      <View style={styles.bodyContainer}>
-        <View style={{ width: 0 }}>
-          {!backOnly && renderBodySvg(bodyFront)}
-        </View>
-        <View
-          style={{ width: frontOnly || backOnly ? 100 * scale : undefined }}
-        >
-          {!frontOnly && renderBodySvg(bodyBack)}
-        </View>
-      </View>
-    </View>
-  );
+  return renderBodySvg(side === "front" ? bodyFront : bodyBack);
 };
 
 Body.defaultProps = {
   scale: 1,
   colors: ["#0984e3", "#74b9ff"],
-  backOnly: false,
-  frontOnly: false,
   zoomOnPress: false,
+  side: "front",
 };
-
-const styles = StyleSheet.create({
-  bodyContainer: {
-    flexDirection: "row",
-  },
-});
 
 export default memo(Body);
