@@ -2953,10 +2953,10 @@ react-is@^16.8.4:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.8.6.tgz#5bbc1e2d29141c9fbdfed456343fe2bc430a6a16"
   integrity sha512-aUk3bHfZ2bRSVFFbbeVS4i+lNPZr3/WM5jT2J5omUVV1zzcs1nAaf3l51ctA5FFvCRbhrH0bdAsRRQddFJZPtA==
 
-react-native-svg@13.4.0:
-  version "13.4.0"
-  resolved "https://registry.yarnpkg.com/react-native-svg/-/react-native-svg-13.4.0.tgz#82399ba0956c454144618aa581e2d748dd3f010a"
-  integrity sha512-B3TwK+H0+JuRhYPzF21AgqMt4fjhCwDZ9QUtwNstT5XcslJBXC0FoTkdZo8IEb1Sv4suSqhZwlAY6lwOv3tHag==
+react-native-svg@^13.11.0:
+  version "13.11.0"
+  resolved "https://registry.yarnpkg.com/react-native-svg/-/react-native-svg-13.11.0.tgz#90be2834a358351a76a57834941cb79183beb6b2"
+  integrity sha512-ApMp0t7NQh85BNq66nfN1/l8pwkj1Lx8Y+ErmBmZ0Oado3DSd+o/Fx/6Jm3GmBkmXl62t6Et0FHj1NYxNQw64w==
   dependencies:
     css-select "^5.1.0"
     css-tree "^1.1.3"

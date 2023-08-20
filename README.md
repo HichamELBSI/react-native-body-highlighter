@@ -6,7 +6,7 @@
 > SVG human body muscles highlighter for react-native.
 
 <div style="text-align:center;width:100%;">
-  <img src="./docs/screenshots/example.jpg" width="150" alt="body-highlighter" />
+  <img src="./docs/screenshots/example.jpeg" width="150" alt="body-highlighter" />
 </div>
 
 ## Installation
@@ -44,6 +44,20 @@ export default function App() {
 }
 ```
 
+# v3.X.X
+
+## Props
+
+| Prop      | Required | Purpose                                               |
+| --------- | -------- | ----------------------------------------------------- |
+| data      | Yes      | (Array) Array of `MuscleObject` to highlight          |
+| colors    | No       | (Array) Defaults to `['#0984e3', '#74b9ff']`          |
+| frontOnly | No       | (Boolean) Display only the front, Defaults to `false` |
+| backOnly  | No       | (Boolean) Display only the back, Defaults to `false`  |
+| scale     | No       | (Float) Defaults to `1`                               |
+
+# v2.X.X
+
 ## Props
 
 | Prop          | Required | Purpose                                                                                                              |
@@ -66,35 +80,30 @@ export default function App() {
 
 ## List of muscles
 
-```Javascript
-// Back
-trapezius
-upper-back
-lower-back
-
-// Chest
-chest
-
-// Arms
-biceps
-triceps
-forearm
-back-deltoids
-front-deltoids
-
-// Abs
-abs
-obliques
-
-// Legs
-adductor
-hamstring
-quadriceps
-abductors
-calves
-gluteal
-
-// Head
-head
-neck
-```
+| Muscles         | v2                 | v3                 | Side  |
+| --------------- | ------------------ | ------------------ | ----- |
+| trapezius       | :white_check_mark: | :white_check_mark: | Both  |
+| upper-back      | :white_check_mark: | :white_check_mark: | Back  |
+| lower-back      | :white_check_mark: | :white_check_mark: | Back  |
+| chest           | :white_check_mark: | :white_check_mark: | Front |
+| biceps          | :white_check_mark: | :white_check_mark: | Front |
+| triceps         | :white_check_mark: | :white_check_mark: | Both  |
+| forearm         | :white_check_mark: | :white_check_mark: | Both  |
+| forearm         | :white_check_mark: | :white_check_mark: | Both  |
+| back-deltoids   | :white_check_mark: | :x:                | Back  |
+| front-deltoids  | :white_check_mark: | :x:                | Front |
+| deltoids        | :x:                | :white_check_mark: | Both  |
+| abs             | :white_check_mark: | :white_check_mark: | Front |
+| obliques        | :white_check_mark: | :white_check_mark: | Both  |
+| adductor        | :white_check_mark: | :x:                | Both  |
+| adductors       | :white_check_mark: | :white_check_mark: | Both  |
+| hamstring       | :white_check_mark: | :white_check_mark: | Back  |
+| abductors       | :white_check_mark: | :x:                | Front |
+| calves          | :white_check_mark: | :white_check_mark: | Both  |
+| gluteal         | :white_check_mark: | :white_check_mark: | Back  |
+| head            | :white_check_mark: | :white_check_mark: | Both  |
+| neck            | :white_check_mark: | :white_check_mark: | Both  |
+| feet            | :x:                | :white_check_mark: | Both  |
+| ankles          | :x:                | :white_check_mark: | Both  |
+| tibialis        | :x:                | :white_check_mark: | Both  |
+| hands           | :x:                | :white_check_mark: | Both  |
