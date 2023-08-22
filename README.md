@@ -38,9 +38,9 @@ export default function App() {
     slug: "biceps",
     intensity: 2,
   });
-  const [isBackSideEnabled, setsetIsBackSideEnabled] = useState(false);
+  const [isBackSideEnabled, setIsBackSideEnabled] = useState(false);
   const toggleSwitch = () =>
-    setsetIsBackSideEnabled((previousState) => !previousState);
+    setIsBackSideEnabled((previousState) => !previousState);
 
   return (
     <View style={styles.container}>
@@ -76,13 +76,13 @@ const styles = StyleSheet.create({
 
 ## v3.X.X Props
 
-| Prop            | Required | Purpose                                                                               |
-| --------------- | -------- | ------------------------------------------------------------------------------------- |
-| data            | Yes      | `BodyPartObject[]` Array of `BodyPartObject` to highlight                             |
-| onBodyPartPress | No       | `Func` - (bodyPart: BodyPartObject) => {} Callback called when a user tap a body part |
-| colors          | No       | `String[]` - Defaults to `['#0984e3', '#74b9ff']`                                     |
-| side            | No       | `String` - Can be "back" or "front" Display only the front, Defaults to `front`       |
-| scale           | No       | (Float) Defaults to `1`                                                               |
+| Prop            | Required | Purpose                                                                                 |
+| --------------- | -------- | --------------------------------------------------------------------------------------- |
+| data            | Yes      | `BodyPartObject[]` - Array of `BodyPartObject` to highlight                             |
+| onBodyPartPress | No       | `Func` - (bodyPart: BodyPartObject) => {} Callback called when a user tap a body part   |
+| colors          | No       | `String[]` - Defaults to `['#0984e3', '#74b9ff']`                                       |
+| side            | No       | `String` - Can be "back" or "front" Display only the front, Defaults to `front`         |
+| scale           | No       | `Float` - Defaults to `1`                                                               |
 
 ## v2.X.X Props
 
@@ -109,27 +109,26 @@ const styles = StyleSheet.create({
 | BodyParts       | v2                 | v3                 | Side  |
 | --------------- | ------------------ | ------------------ | ----- |
 | trapezius       | :white_check_mark: | :white_check_mark: | Both  |
-| upper-back      | :white_check_mark: | :white_check_mark: | Back  |
-| lower-back      | :white_check_mark: | :white_check_mark: | Back  |
-| chest           | :white_check_mark: | :white_check_mark: | Front |
-| biceps          | :white_check_mark: | :white_check_mark: | Front |
 | triceps         | :white_check_mark: | :white_check_mark: | Both  |
 | forearm         | :white_check_mark: | :white_check_mark: | Both  |
-| forearm         | :white_check_mark: | :white_check_mark: | Both  |
-| back-deltoids   | :white_check_mark: | :x:                | Back  |
-| front-deltoids  | :white_check_mark: | :x:                | Front |
-| deltoids        | :x:                | :white_check_mark: | Both  |
-| abs             | :white_check_mark: | :white_check_mark: | Front |
 | obliques        | :white_check_mark: | :white_check_mark: | Both  |
-| adductor        | :white_check_mark: | :x:                | Both  |
 | adductors       | :white_check_mark: | :white_check_mark: | Both  |
-| hamstring       | :white_check_mark: | :white_check_mark: | Back  |
-| abductors       | :white_check_mark: | :x:                | Front |
 | calves          | :white_check_mark: | :white_check_mark: | Both  |
-| gluteal         | :white_check_mark: | :white_check_mark: | Back  |
 | head            | :white_check_mark: | :white_check_mark: | Both  |
 | neck            | :white_check_mark: | :white_check_mark: | Both  |
+| chest           | :white_check_mark: | :white_check_mark: | Front |
+| biceps          | :white_check_mark: | :white_check_mark: | Front |
+| abs             | :white_check_mark: | :white_check_mark: | Front |
+| upper-back      | :white_check_mark: | :white_check_mark: | Back  |
+| lower-back      | :white_check_mark: | :white_check_mark: | Back  |
+| hamstring       | :white_check_mark: | :white_check_mark: | Back  |
+| gluteal         | :white_check_mark: | :white_check_mark: | Back  |
+| deltoids        | :x:                | :white_check_mark: | Both  |
+| hands           | :x:                | :white_check_mark: | Both  |
 | feet            | :x:                | :white_check_mark: | Both  |
 | ankles          | :x:                | :white_check_mark: | Both  |
 | tibialis        | :x:                | :white_check_mark: | Both  |
-| hands           | :x:                | :white_check_mark: | Both  |
+| adductor        | :white_check_mark: | :x:                | Both  |
+| front-deltoids  | :white_check_mark: | :x:                | Front |
+| abductors       | :white_check_mark: | :x:                | Front |
+| back-deltoids   | :white_check_mark: | :x:                | Back  |
