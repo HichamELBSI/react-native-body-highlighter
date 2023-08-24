@@ -89,7 +89,7 @@ const styles = StyleSheet.create({
 | Prop            | Required | Purpose                                                                                                                     |
 | --------------- | -------- | --------------------------------------------------------------------------------------------------------------------------- |
 | data            | Yes      | (Array) Array of `BodyPartObject` to highlight                                                                              |
-| onBodyPartPress | No       | (Func) (bodyPart: BodyPartObject) => {} Callback called when a user tap a body part, disabled if zoomOnPress is set to true |
+| onMusclePress   | No       | (Func) (bodyPart: BodyPartObject) => {} Callback called when a user tap a body part, disabled if zoomOnPress is set to true |
 | colors          | No       | (Array) Defaults to `['#0984e3', '#74b9ff']`                                                                                |
 | frontOnly       | No       | (Boolean) Display only the front, Defaults to `false`                                                                       |
 | backOnly        | No       | (Boolean) Display only the back, Defaults to `false`                                                                        |
