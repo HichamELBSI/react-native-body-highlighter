@@ -1,6 +1,6 @@
-import { Muscle } from "..";
+import { BodyPart } from "..";
 
-export const bodyBack: Muscle[] = [
+export const bodyBack: BodyPart[] = [
   // Trapezius
   {
     slug: "neck",
