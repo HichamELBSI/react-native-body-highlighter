@@ -84,13 +84,13 @@ const Body = ({ colors, data, scale, side, onBodyPartPress }: Props) => {
   const renderBodySvg = (data: ReadonlyArray<BodyPart>) => {
     return (
       <SvgWrapper side={side} scale={scale}>
-        {mergedBodyParts(data).map((bodyPart: any) => {
+        {mergedBodyParts(data).map((bodyPart: BodyPart) => {
           if (bodyPart.pathArray) {
             return bodyPart.pathArray.map((path: string) => {
               return (
                 <Path
                   key={path}
-                  onPress={() => onBodyPartPress && onBodyPartPress(bodyPart)}
+                  onPress={() => onBodyPartPress?.(bodyPart)}
                   id={bodyPart.slug}
                   fill={getColorToFill(bodyPart)}
                   d={path}
