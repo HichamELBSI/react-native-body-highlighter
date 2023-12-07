@@ -1,7 +1,7 @@
 import { BodyPart } from "..";
 
 export const bodyBack: BodyPart[] = [
-  // Trapezius
+  // Neck
   {
     slug: "neck",
     color: "#3f3f3f",
@@ -11,6 +11,7 @@ export const bodyBack: BodyPart[] = [
     ],
   },
 
+  // Trapezius
   {
     slug: "trapezius",
     color: "#3f3f3f",
