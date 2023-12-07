@@ -3,20 +3,24 @@
 [![npm](https://img.shields.io/npm/v/react-native-body-highlighter.svg)](https://www.npmjs.com/package/react-native-body-highlighter) [![Downloads](https://img.shields.io/npm/dt/react-native-body-highlighter.svg)](https://www.npmjs.com/package/react-native-body-highlighter)
 [![CircleCI](https://circleci.com/gh/HichamELBSI/react-native-body-highlighter.svg?style=svg)](https://circleci.com/gh/HichamELBSI/react-native-body-highlighter)
 
-> SVG human body parts highlighter for react-native.
+> SVG human body parts highlighter for react-native (Expo compatible).
 
 <div style="text-align:center;width:100%;">
-  <img src="./docs/screenshots/example-front.PNG" width="150" alt="body-highlighter" />
-  <img src="./docs/screenshots/example-back.PNG" width="150" alt="body-highlighter" />
+  <img src="./docs/screenshots/example-female-front.PNG" width="150" alt="body-highlighter" />
+  <img src="./docs/screenshots/example-female-back.PNG" width="150" alt="body-highlighter" />
+  <img src="./docs/screenshots/example-male-front.PNG" width="150" alt="body-highlighter" />
+  <img src="./docs/screenshots/example-male-back.PNG" width="150" alt="body-highlighter" />
 </div>
 
 ## Installation
 
+npm
+
 ```bash
-$ npm install react-native-body-highlighter --save
+$ npm install react-native-body-highlighter
 ```
 
-or use yarn
+yarn
 
 ```bash
 $ yarn add react-native-body-highlighter
@@ -24,42 +28,24 @@ $ yarn add react-native-body-highlighter
 
 ## Usage
 
-Note: If you don't use `Expo`, ensure to add [react-native-svg](https://github.com/react-native-community/react-native-svg) to your project before using this package.
-
-The snippet below shows how the component can be used
+### Basic example
 
 ```jsx
-import { StyleSheet, Switch, View } from "react-native";
 import { useState } from "react";
 import Body from "react-native-body-highlighter";
 
 export default function App() {
-  const [bodyPartSelected, setBodyPartSelected] = useState({
-    slug: "biceps",
-    intensity: 2,
-  });
-  const [isBackSideEnabled, setIsBackSideEnabled] = useState(false);
-  const toggleSwitch = () =>
-    setIsBackSideEnabled((previousState) => !previousState);
-
   return (
     <View style={styles.container}>
       <Body
         data={[
           { slug: "chest", intensity: 1 },
           { slug: "abs", intensity: 2 },
-          { slug: "upper-back", intensity: 1 },
-          { slug: "lower-back", intensity: 2 },
-          bodyPartSelected,
         ]}
-        onBodyPartPress={(e) =>
-          setBodyPartSelected({ slug: e.slug, intensity: 2 })
-        }
-        side={isBackSideEnabled ? "back" : "front"}
+        gender="female"
+        side="front"
         scale={1.7}
       />
-      <Switch onValueChange={toggleSwitch} value={isBackSideEnabled} />
-      <StatusBar style="auto" />
     </View>
   );
 }
@@ -74,27 +60,102 @@ const styles = StyleSheet.create({
 });
 ```
 
+<details>
+<summary style="font-size:18px; font-weight: bold;">Complete example</summary>
+<p>
+
+```jsx
+import { StyleSheet, Switch, Text, View } from "react-native";
+import { useState } from "react";
+import Body from "react-native-body-highlighter";
+
+export default function App() {
+  const [bodyPartSelected, setBodyPartSelected] = useState({
+    slug: "biceps",
+    intensity: 2,
+  });
+  const [isBackSideEnabled, setIsBackSideEnabled] = useState(false);
+  const [isMale, setIsMale] = useState(true);
+  const toggleSwitch = () =>
+    setIsBackSideEnabled((previousState) => !previousState);
+
+  const toggleGenderSwitch = () => setIsMale((previousState) => !previousState);
+
+  return (
+    <View style={styles.container}>
+      <Body
+        data={[
+          { slug: "chest", intensity: 1 },
+          { slug: "abs", intensity: 2 },
+          { slug: "upper-back", intensity: 1 },
+          { slug: "lower-back", intensity: 2 },
+          bodyPartSelected,
+        ]}
+        onBodyPartPress={(e) =>
+          setBodyPartSelected({ slug: e.slug, intensity: 2 })
+        }
+        gender={isMale ? "male" : "female"}
+        side={isBackSideEnabled ? "back" : "front"}
+        scale={1.7}
+      />
+      <View style={styles.switchContainer}>
+        <View style={styles.switch}>
+          <Text>Side ({isBackSideEnabled ? "Back" : "Front"})</Text>
+          <Switch onValueChange={toggleSwitch} value={isBackSideEnabled} />
+        </View>
+        <View style={styles.switch}>
+          <Text>Gender ({isMale ? "Male" : "Female"})</Text>
+          <Switch onValueChange={toggleGenderSwitch} value={isMale} />
+        </View>
+      </View>
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  switchContainer: {
+    flexDirection: "row",
+    gap: 30,
+  },
+  switch: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+});
+```
+
+</p>
+</details>
+
 ## v3.X.X Props
 
-| Prop            | Required | Purpose                                                                                 |
-| --------------- | -------- | --------------------------------------------------------------------------------------- |
-| data            | Yes      | `BodyPartObject[]` - Array of `BodyPartObject` to highlight                             |
-| onBodyPartPress | No       | `Func` - (bodyPart: BodyPartObject) => {} Callback called when a user tap a body part   |
-| colors          | No       | `String[]` - Defaults to `['#0984e3', '#74b9ff']`                                       |
-| side            | No       | `String` - Can be "back" or "front" Display only the front, Defaults to `front`         |
-| scale           | No       | `Float` - Defaults to `1`                                                               |
+| Prop            | Required | Purpose                                                                                                                  |
+| --------------- | -------- | ------------------------------------------------------------------------------------------------------------------------ |
+| data            | Yes      | `BodyPartObject[]` - Array of `BodyPartObject` to highlight                                                              |
+| onBodyPartPress | No       | `Func` - (bodyPart: BodyPartObject) => {} Callback called when a user tap a body part                                    |
+| colors          | No       | `String[]` - Defaults to `['#0984e3', '#74b9ff']`                                                                        |
+| side            | No       | `string` - Can be "back" or "front", Defaults to `front`                                                                 |
+| gender          | No       | `string` - Can be "male" or "female", Defaults to `male` - :warning: Please consider `female` as a beta work in progress |
+| scale           | No       | `Float` - Defaults to `1`                                                                                                |
 
 ## v2.X.X Props
 
-| Prop            | Required | Purpose                                                                                                                     |
-| --------------- | -------- | --------------------------------------------------------------------------------------------------------------------------- |
-| data            | Yes      | (Array) Array of `BodyPartObject` to highlight                                                                              |
-| onMusclePress   | No       | (Func) (bodyPart: BodyPartObject) => {} Callback called when a user tap a body part, disabled if zoomOnPress is set to true |
-| colors          | No       | (Array) Defaults to `['#0984e3', '#74b9ff']`                                                                                |
-| frontOnly       | No       | (Boolean) Display only the front, Defaults to `false`                                                                       |
-| backOnly        | No       | (Boolean) Display only the back, Defaults to `false`                                                                        |
-| zoomOnPress     | No       | (Boolean) Defaults to false                                                                                                 |
-| scale           | No       | (Float) Defaults to `1`                                                                                                     |
+| Prop          | Required | Purpose                                                                                                                     |
+| ------------- | -------- | --------------------------------------------------------------------------------------------------------------------------- |
+| data          | Yes      | (Array) Array of `BodyPartObject` to highlight                                                                              |
+| onMusclePress | No       | (Func) (bodyPart: BodyPartObject) => {} Callback called when a user tap a body part, disabled if zoomOnPress is set to true |
+| colors        | No       | (Array) Defaults to `['#0984e3', '#74b9ff']`                                                                                |
+| frontOnly     | No       | (Boolean) Display only the front, Defaults to `false`                                                                       |
+| backOnly      | No       | (Boolean) Display only the back, Defaults to `false`                                                                        |
+| zoomOnPress   | No       | (Boolean) Defaults to false                                                                                                 |
+| scale         | No       | (Float) Defaults to `1`                                                                                                     |
 
 ## BodyPart object model
 
