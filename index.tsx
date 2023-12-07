@@ -4,7 +4,10 @@ import differenceWith from "ramda/src/differenceWith";
 
 import { bodyFront } from "./assets/bodyFront";
 import { bodyBack } from "./assets/bodyBack";
-import { SvgWrapper } from "./components/SvgWrapper";
+import { SvgMaleWrapper } from "./components/SvgMaleWrapper";
+import { bodyFemaleFront } from "./assets/bodyFemaleFront";
+import { bodyFemaleBack } from "./assets/bodyFemaleBack";
+import { SvgFemaleWrapper } from "./components/SvgFemaleWrapper";
 
 export type Slug =
   | "abs"
@@ -46,12 +49,20 @@ type Props = {
   frontOnly: boolean;
   backOnly: boolean;
   side: "front" | "back";
+  gender?: "male" | "female";
   onBodyPartPress: (b: BodyPart) => void;
 };
 
 const comparison = (a: BodyPart, b: BodyPart) => a.slug === b.slug;
 
-const Body = ({ colors, data, scale, side, onBodyPartPress }: Props) => {
+const Body = ({
+  colors,
+  data,
+  scale,
+  side,
+  gender = "male",
+  onBodyPartPress,
+}: Props) => {
   const mergedBodyParts = useCallback(
     (dataSource: ReadonlyArray<BodyPart>) => {
       const innerData = data
@@ -82,6 +93,7 @@ const Body = ({ colors, data, scale, side, onBodyPartPress }: Props) => {
   };
 
   const renderBodySvg = (data: ReadonlyArray<BodyPart>) => {
+    const SvgWrapper = gender === "male" ? SvgMaleWrapper : SvgFemaleWrapper;
     return (
       <SvgWrapper side={side} scale={scale}>
         {mergedBodyParts(data).map((bodyPart: BodyPart) => {
@@ -102,6 +114,10 @@ const Body = ({ colors, data, scale, side, onBodyPartPress }: Props) => {
       </SvgWrapper>
     );
   };
+
+  if (gender === "female") {
+    return renderBodySvg(side === "front" ? bodyFemaleFront : bodyFemaleBack);
+  }
 
   return renderBodySvg(side === "front" ? bodyFront : bodyBack);
 };
