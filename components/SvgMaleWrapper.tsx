@@ -18,7 +18,7 @@ export const SvgMaleWrapper: React.FC<SvgWrapperProps> = ({
 
   return (
     <Svg viewBox={viewBox} height={400 * scale} width={200 * scale}>
-      <G strokeWidth={2} fill="none" strokeLinecap="butt">
+      <G strokeWidth={2} fill="#e6be9a" strokeLinecap="butt">
         {gender === "male" && (
           <>
             {side === "front" && (

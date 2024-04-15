@@ -50,6 +50,7 @@ type Props = {
   backOnly: boolean;
   side: "front" | "back";
   gender?: "male" | "female";
+  skinType: SkinType;
   onBodyPartPress: (b: BodyPart) => void;
 };
 
@@ -61,6 +62,7 @@ const Body = ({
   scale,
   side,
   gender = "male",
+  skinType,
   onBodyPartPress,
 }: Props) => {
   const mergedBodyParts = useCallback(
@@ -116,17 +118,18 @@ const Body = ({
   };
 
   if (gender === "female") {
-    return renderBodySvg(side === "front" ? bodyFemaleFront : bodyFemaleBack);
+    return renderBodySvg(side === "front" ? bodyFemaleFront(skinType) : bodyFemaleBack(skinType));
   }
 
-  return renderBodySvg(side === "front" ? bodyFront : bodyBack);
+  return renderBodySvg(side === "front" ? bodyFront(skinType) : bodyBack(skinType));
 };
 
 Body.defaultProps = {
   scale: 1,
-  colors: ["#0984e3", "#74b9ff"],
+  colors: ["#ff9800", "#ffecb3"],
   zoomOnPress: false,
   side: "front",
+  skinType: 3,
 };
 
 export default memo(Body);
