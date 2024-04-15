@@ -1,6 +1,6 @@
-type SkinType = 1 | 2 | 3 | 4 | 5 | 6;
+export type SkinType = 1 | 2 | 3 | 4 | 5 | 6;
 
-const skinColorMapping:{[key in SkinType]: string} = {
+export const skinColorMapping:{[key in SkinType]: string} = {
     1: '#f5d6ba',
     2: '#eabc9a',
     3: '#d6a887',

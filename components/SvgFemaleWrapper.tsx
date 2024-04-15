@@ -5,18 +5,20 @@ type SvgWrapperProps = {
   children: React.ReactNode;
   scale: number;
   side: "front" | "back";
+  skinColor: string;
 };
 
 export const SvgFemaleWrapper: React.FC<SvgWrapperProps> = ({
   children,
   scale,
   side,
+  skinColor,
 }) => {
   const viewBox = side === "front" ? "-50 -40 734 1538" : "756 0 774 1448";
 
   return (
     <Svg viewBox={viewBox} height={400 * scale} width={200 * scale}>
-      <G strokeWidth={2} fill="#e6be9a" strokeLinecap="butt">
+      <G strokeWidth={2} fill={skinColor} strokeLinecap="butt">
         {side === "front" && (
           <Path
             stroke="#dfdfdf"

@@ -8,6 +8,7 @@ import { SvgMaleWrapper } from "./components/SvgMaleWrapper";
 import { bodyFemaleFront } from "./assets/bodyFemaleFront";
 import { bodyFemaleBack } from "./assets/bodyFemaleBack";
 import { SvgFemaleWrapper } from "./components/SvgFemaleWrapper";
+import { SkinType, skinColorMapping } from './assets/skinTypes'
 
 export type Slug =
   | "abs"
@@ -62,7 +63,7 @@ const Body = ({
   scale,
   side,
   gender = "male",
-  skinType,
+  skinType = 3,
   onBodyPartPress,
 }: Props) => {
   const mergedBodyParts = useCallback(
@@ -94,10 +95,11 @@ const Body = ({
     return color;
   };
 
+  const skinColor = skinColorMapping[skinType];
   const renderBodySvg = (data: ReadonlyArray<BodyPart>) => {
     const SvgWrapper = gender === "male" ? SvgMaleWrapper : SvgFemaleWrapper;
     return (
-      <SvgWrapper side={side} scale={scale}>
+      <SvgWrapper side={side} scale={scale} skinColor={skinColor}>
         {mergedBodyParts(data).map((bodyPart: BodyPart) => {
           if (bodyPart.pathArray) {
             return bodyPart.pathArray.map((path: string) => {
@@ -118,10 +120,10 @@ const Body = ({
   };
 
   if (gender === "female") {
-    return renderBodySvg(side === "front" ? bodyFemaleFront(skinType) : bodyFemaleBack(skinType));
+    return renderBodySvg(side === "front" ? bodyFemaleFront(skinColor) : bodyFemaleBack(skinColor));
   }
 
-  return renderBodySvg(side === "front" ? bodyFront(skinType) : bodyBack(skinType));
+  return renderBodySvg(side === "front" ? bodyFront(skinColor) : bodyBack(skinColor));
 };
 
 Body.defaultProps = {

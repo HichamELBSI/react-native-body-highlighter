@@ -1,7 +1,6 @@
 import { BodyPart } from "..";
 
-export const bodyBack = (skinType: SkinType): BodyPart[] => {
-  const skinColor = skinColorMapping[skinType] || skinColorMapping[3];
+export const bodyBack = (skinColor: string): BodyPart[] => {
   return [
   // Neck
   {

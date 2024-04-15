@@ -6,6 +6,7 @@ type SvgWrapperProps = {
   scale: number;
   side: "front" | "back";
   gender?: "male" | "female";
+  skinColor: string;
 };
 
 export const SvgMaleWrapper: React.FC<SvgWrapperProps> = ({
@@ -13,12 +14,13 @@ export const SvgMaleWrapper: React.FC<SvgWrapperProps> = ({
   scale,
   side,
   gender = "male",
+  skinColor = "#e6be9a",
 }) => {
   const viewBox = side === "front" ? "0 0 724 1448" : "724 0 724 1448";
 
   return (
     <Svg viewBox={viewBox} height={400 * scale} width={200 * scale}>
-      <G strokeWidth={2} fill="#e6be9a" strokeLinecap="butt">
+      <G strokeWidth={2} fill={skinColor} strokeLinecap="butt">
         {gender === "male" && (
           <>
             {side === "front" && (
