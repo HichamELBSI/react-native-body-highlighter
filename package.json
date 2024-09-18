@@ -1,6 +1,6 @@
 {
   "name": "react-native-body-highlighter",
-  "version": "3.0.0-beta.7",
+  "version": "3.0.0-beta.8",
   "main": "index.tsx",
   "author": "HichamELBSI",
   "license": "MIT",
@@ -20,7 +20,7 @@
   },
   "dependencies": {
     "ramda": "^0.29.1",
-    "react-native-svg": "^14.1.0"
+    "react-native-svg": "^15.2.0"
   },
   "peerDependencies": {
     "react": "*",
