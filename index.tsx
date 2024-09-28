@@ -51,7 +51,7 @@ type Props = {
   side: "front" | "back";
   gender?: "male" | "female";
   onBodyPartPress: (b: BodyPart) => void;
-  withBorder?: boolean;
+  border: string | "none";
 };
 
 const comparison = (a: BodyPart, b: BodyPart) => a.slug === b.slug;
@@ -63,7 +63,7 @@ const Body = ({
   side = "front",
   gender = "male",
   onBodyPartPress,
-  withBorder = true,
+  border = "#dfdfdf",
 }: Props) => {
   const mergedBodyParts = useCallback(
     (dataSource: ReadonlyArray<BodyPart>) => {
@@ -97,7 +97,7 @@ const Body = ({
   const renderBodySvg = (data: ReadonlyArray<BodyPart>) => {
     const SvgWrapper = gender === "male" ? SvgMaleWrapper : SvgFemaleWrapper;
     return (
-      <SvgWrapper side={side} scale={scale} withBorder={withBorder}>
+      <SvgWrapper side={side} scale={scale} border={border}>
         {mergedBodyParts(data).map((bodyPart: BodyPart) => {
           if (bodyPart.pathArray) {
             return bodyPart.pathArray.map((path: string) => {

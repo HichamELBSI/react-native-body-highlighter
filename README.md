@@ -45,7 +45,7 @@ export default function App() {
         gender="female"
         side="front"
         scale={1.7}
-        withBorder
+        border="#dfdfdf"
       />
     </View>
   );
@@ -98,7 +98,7 @@ export default function App() {
         gender={isMale ? "male" : "female"}
         side={isBackSideEnabled ? "back" : "front"}
         scale={1.7}
-        withBorder
+        border="#dfdfdf"
       />
       <View style={styles.switchContainer}>
         <View style={styles.switch}>
@@ -146,7 +146,7 @@ const styles = StyleSheet.create({
 | side            | No       | `string` - Can be "back" or "front", Defaults to `front`                                                                 |
 | gender          | No       | `string` - Can be "male" or "female", Defaults to `male` - :warning: Please consider `female` as a beta work in progress |
 | scale           | No       | `Float` - Defaults to `1`                                                                                                |
-| withBorder      | No       | `Boolean` - Defaults to `true`                                                                                           |
+| border          | No       | `string` - Defaults to `#dfdfdf` (`none` to hide the border)                                                             |
 
 ## v2.X.X Props
 
