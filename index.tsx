@@ -36,25 +36,32 @@ export type Slug =
   | "upper-back";
 
 export interface BodyPart {
-  intensity?: number;
-  color: string;
+  color?: string;
   slug?: Slug;
-  pathArray?: string[];
+  path?: {
+    common?: string[];
+    left?: string[];
+    right?: string[];
+  };
 }
 
-type Props = {
-  colors: ReadonlyArray<string>;
-  data: ReadonlyArray<BodyPart>;
-  scale: number;
-  frontOnly: boolean;
-  backOnly: boolean;
-  side: "front" | "back";
+export interface ExtendedBodyPart extends BodyPart {
+  intensity?: number;
+  side?: "left" | "right";
+}
+
+export type BodyProps = {
+  colors?: ReadonlyArray<string>;
+  data: ReadonlyArray<ExtendedBodyPart>;
+  scale?: number;
+  side?: "front" | "back";
   gender?: "male" | "female";
-  onBodyPartPress: (b: BodyPart) => void;
-  border: string | "none";
+  onBodyPartPress?: (b: ExtendedBodyPart, side?: "left" | "right") => void;
+  border?: string | "none";
 };
 
-const comparison = (a: BodyPart, b: BodyPart) => a.slug === b.slug;
+const comparison = (a: ExtendedBodyPart, b: ExtendedBodyPart) =>
+  a.slug === b.slug;
 
 const Body = ({
   colors = ["#0984e3", "#74b9ff"],
@@ -64,12 +71,13 @@ const Body = ({
   gender = "male",
   onBodyPartPress,
   border = "#dfdfdf",
-}: Props) => {
+}: BodyProps) => {
   const mergedBodyParts = useCallback(
     (dataSource: ReadonlyArray<BodyPart>) => {
       const innerData = data
         .map((d) => {
-          return dataSource.find((t) => t.slug === d.slug);
+          let foundedBodyPart = dataSource.find((e) => e.slug === d.slug);
+          return foundedBodyPart;
         })
         .filter(Boolean);
 
@@ -87,31 +95,71 @@ const Body = ({
     [data, colors]
   );
 
-  const getColorToFill = (bodyPart: BodyPart) => {
+  const getColorToFill = (bodyPart: ExtendedBodyPart) => {
     let color;
-    if (bodyPart.intensity) color = colors[bodyPart.intensity];
-    else color = bodyPart.color;
+
+    if (bodyPart.intensity) {
+      color = colors[bodyPart.intensity];
+    } else {
+      color = bodyPart.color;
+    }
+
     return color;
   };
 
-  const renderBodySvg = (data: ReadonlyArray<BodyPart>) => {
+  const renderBodySvg = (bodyToRender: ReadonlyArray<BodyPart>) => {
     const SvgWrapper = gender === "male" ? SvgMaleWrapper : SvgFemaleWrapper;
+
     return (
       <SvgWrapper side={side} scale={scale} border={border}>
-        {mergedBodyParts(data).map((bodyPart: BodyPart) => {
-          if (bodyPart.pathArray) {
-            return bodyPart.pathArray.map((path: string) => {
-              return (
-                <Path
-                  key={path}
-                  onPress={() => onBodyPartPress?.(bodyPart)}
-                  id={bodyPart.slug}
-                  fill={getColorToFill(bodyPart)}
-                  d={path}
-                />
-              );
-            });
-          }
+        {mergedBodyParts(bodyToRender).map((bodyPart: ExtendedBodyPart) => {
+          const commonPaths = (bodyPart.path?.common || []).map((path) => {
+            const dataCommonPath = data.find((d) => d.slug === bodyPart.slug)
+              ?.path?.common;
+
+            return (
+              <Path
+                key={path}
+                onPress={() => onBodyPartPress?.(bodyPart)}
+                id={bodyPart.slug}
+                fill={
+                  dataCommonPath ? getColorToFill(bodyPart) : bodyPart.color
+                }
+                d={path}
+              />
+            );
+          });
+
+          const leftPaths = (bodyPart.path?.left || []).map((path) => {
+            const isOnlyRight =
+              data.find((d) => d.slug === bodyPart.slug)?.side === "right";
+
+            return (
+              <Path
+                key={path}
+                onPress={() => onBodyPartPress?.(bodyPart, "left")}
+                id={bodyPart.slug}
+                fill={isOnlyRight ? "#3f3f3f" : getColorToFill(bodyPart)}
+                d={path}
+              />
+            );
+          });
+          const rightPaths = (bodyPart.path?.right || []).map((path) => {
+            const isOnlyLeft =
+              data.find((d) => d.slug === bodyPart.slug)?.side === "left";
+
+            return (
+              <Path
+                key={path}
+                onPress={() => onBodyPartPress?.(bodyPart, "right")}
+                id={bodyPart.slug}
+                fill={isOnlyLeft ? "#3f3f3f" : getColorToFill(bodyPart)}
+                d={path}
+              />
+            );
+          });
+
+          return [...commonPaths, ...leftPaths, ...rightPaths];
         })}
       </SvgWrapper>
     );
@@ -124,4 +172,4 @@ const Body = ({
   return renderBodySvg(side === "front" ? bodyFront : bodyBack);
 };
 
-export default memo(Body);
+export default Body;

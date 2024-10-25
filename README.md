@@ -39,8 +39,8 @@ export default function App() {
     <View style={styles.container}>
       <Body
         data={[
-          { slug: "chest", intensity: 1 },
-          { slug: "abs", intensity: 2 },
+          { slug: "chest", intensity: 1, side: "left" },
+          { slug: "biceps", intensity: 2 },
         ]}
         gender="female"
         side="front"
@@ -68,46 +68,56 @@ const styles = StyleSheet.create({
 ```jsx
 import { StyleSheet, Switch, Text, View } from "react-native";
 import { useState } from "react";
-import Body from "react-native-body-highlighter";
+import Body, { ExtendedBodyPart } from "react-native-body-highlighter";
 
 export default function App() {
-  const [bodyPartSelected, setBodyPartSelected] = useState({
-    slug: "biceps",
-    intensity: 2,
-  });
-  const [isBackSideEnabled, setIsBackSideEnabled] = useState(false);
-  const [isMale, setIsMale] = useState(true);
-  const toggleSwitch = () =>
-    setIsBackSideEnabled((previousState) => !previousState);
+  const [selectedBodyPart, setSelectedBodyPart] =
+    useState <
+    ExtendedBodyPart >
+    {
+      slug: "biceps",
+      intensity: 2,
+      side: "right",
+    };
+  const [side, setSide] = (useState < "back") | ("front" > "front");
+  const [gender, setGender] = (useState < "male") | ("female" > "male");
 
-  const toggleGenderSwitch = () => setIsMale((previousState) => !previousState);
+  const sideSwitch = () =>
+    setSide((previousState) => (previousState === "front" ? "back" : "front"));
+
+  const toggleGenderSwitch = () => {
+    setGender((previousState) =>
+      previousState === "male" ? "female" : "male"
+    );
+  };
 
   return (
     <View style={styles.container}>
       <Body
         data={[
-          { slug: "chest", intensity: 1 },
-          { slug: "abs", intensity: 2 },
-          { slug: "upper-back", intensity: 1 },
-          { slug: "lower-back", intensity: 2 },
-          bodyPartSelected,
+          { slug: "chest", intensity: 1, side: "left" },
+          { slug: "biceps", intensity: 1 },
+          selectedBodyPart,
         ]}
-        onBodyPartPress={(e) =>
-          setBodyPartSelected({ slug: e.slug, intensity: 2 })
+        onBodyPartPress={(e, side) =>
+          setSelectedBodyPart({ slug: e.slug, intensity: 2, side })
         }
-        gender={isMale ? "male" : "female"}
-        side={isBackSideEnabled ? "back" : "front"}
+        gender={gender}
+        side={side}
         scale={1.7}
         border="#dfdfdf"
       />
       <View style={styles.switchContainer}>
         <View style={styles.switch}>
-          <Text>Side ({isBackSideEnabled ? "Back" : "Front"})</Text>
-          <Switch onValueChange={toggleSwitch} value={isBackSideEnabled} />
+          <Text>Side ({side})</Text>
+          <Switch onValueChange={sideSwitch} value={side === "front"} />
         </View>
         <View style={styles.switch}>
-          <Text>Gender ({isMale ? "Male" : "Female"})</Text>
-          <Switch onValueChange={toggleGenderSwitch} value={isMale} />
+          <Text>Gender ({gender})</Text>
+          <Switch
+            onValueChange={toggleGenderSwitch}
+            value={gender === "male"}
+          />
         </View>
       </View>
     </View>
@@ -141,11 +151,11 @@ const styles = StyleSheet.create({
 | Prop            | Required | Purpose                                                                                                                  |
 | --------------- | -------- | ------------------------------------------------------------------------------------------------------------------------ |
 | data            | Yes      | `BodyPartObject[]` - Array of `BodyPartObject` to highlight                                                              |
-| onBodyPartPress | No       | `Func` - (bodyPart: BodyPartObject) => {} Callback called when a user tap a body part                                    |
-| colors          | No       | `String[]` - Defaults to `['#0984e3', '#74b9ff']`                                                                        |
-| side            | No       | `string` - Can be "back" or "front", Defaults to `front`                                                                 |
+| onBodyPartPress | No       | `Func` - `(bodyPart: BodyPartObject, side?: left \| right) => {}` Callback called when a user tap a body part            |
+| colors          | No       | `string[]` - Defaults to `['#0984e3', '#74b9ff']`                                                                        |
+| side            | No       | `front \| back` - Defaults to `front`                                                                                    |
 | gender          | No       | `string` - Can be "male" or "female", Defaults to `male` - :warning: Please consider `female` as a beta work in progress |
-| scale           | No       | `Float` - Defaults to `1`                                                                                                |
+| scale           | No       | `number` - Defaults to `1`                                                                                               |
 | border          | No       | `string` - Defaults to `#dfdfdf` (`none` to hide the border)                                                             |
 
 ## v2.X.X Props
@@ -162,11 +172,13 @@ const styles = StyleSheet.create({
 
 ## BodyPart object model
 
-- #### BodyPartObject : `{ slug: BodyPartName, intensity: IntensityNumber }`
+- #### BodyPartObject: `{ slug: BodyPartName, intensity: IntensityNumber, side?: 'left' | 'right' }`
 
-- #### BodyPartName : Body part name to highlight (See the list of available body parts below)
+- #### BodyPartName: Body part name to highlight (See the list of available body parts below)
 
-- #### IntensityNumber : Color intensity (if the `colors` property is set: from 1 to `colors.length` + 1. If not, intensity can be 1 or 2)
+- #### IntensityNumber: Color intensity (if the `colors` property is set: from 1 to `colors.length` + 1. If not, intensity can be 1 or 2)
+
+- #### Side (optional): Can be `left`, `right`. Useful for selecting a single part or a pair (Do not set the side if you need to select the pair)
 
 ## List of body parts
 
