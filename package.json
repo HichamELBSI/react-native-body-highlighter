@@ -1,6 +1,6 @@
 {
   "name": "react-native-body-highlighter",
-  "version": "3.0.1",
+  "version": "3.1.0",
   "main": "index.tsx",
   "author": "HichamELBSI",
   "license": "MIT",
@@ -16,7 +16,8 @@
     "svg"
   ],
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "ramda": "^0.29.1",
@@ -27,7 +28,6 @@
     "react-native": "*"
   },
   "devDependencies": {
-    "@types/jest": "^24.0.15",
     "@types/ramda": "^0.26.16",
     "@types/react": "^16.8.23",
     "@types/react-native": "^0.60.2",
