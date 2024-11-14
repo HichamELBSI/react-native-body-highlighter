@@ -146,29 +146,17 @@ const styles = StyleSheet.create({
 </p>
 </details>
 
-## v3.X.X Props
+## Props
 
-| Prop            | Required | Purpose                                                                                                                  |
-| --------------- | -------- | ------------------------------------------------------------------------------------------------------------------------ |
-| data            | Yes      | `BodyPartObject[]` - Array of `BodyPartObject` to highlight                                                              |
-| onBodyPartPress | No       | `Func` - `(bodyPart: BodyPartObject, side?: left \| right) => {}` Callback called when a user tap a body part            |
-| colors          | No       | `string[]` - Defaults to `['#0984e3', '#74b9ff']`                                                                        |
-| side            | No       | `front \| back` - Defaults to `front`                                                                                    |
-| gender          | No       | `string` - Can be "male" or "female", Defaults to `male` - :warning: Please consider `female` as a beta work in progress |
-| scale           | No       | `number` - Defaults to `1`                                                                                               |
-| border          | No       | `string` - Defaults to `#dfdfdf` (`none` to hide the border)                                                             |
-
-## v2.X.X Props
-
-| Prop          | Required | Purpose                                                                                                                     |
-| ------------- | -------- | --------------------------------------------------------------------------------------------------------------------------- |
-| data          | Yes      | (Array) Array of `BodyPartObject` to highlight                                                                              |
-| onMusclePress | No       | (Func) (bodyPart: BodyPartObject) => {} Callback called when a user tap a body part, disabled if zoomOnPress is set to true |
-| colors        | No       | (Array) Defaults to `['#0984e3', '#74b9ff']`                                                                                |
-| frontOnly     | No       | (Boolean) Display only the front, Defaults to `false`                                                                       |
-| backOnly      | No       | (Boolean) Display only the back, Defaults to `false`                                                                        |
-| zoomOnPress   | No       | (Boolean) Defaults to false                                                                                                 |
-| scale         | No       | (Float) Defaults to `1`                                                                                                     |
+| Prop            | Required | Purpose                                                                                                       |
+| --------------- | -------- | ------------------------------------------------------------------------------------------------------------- |
+| data            | Yes      | `BodyPartObject[]` - Array of `BodyPartObject` to highlight                                                   |
+| onBodyPartPress | No       | `Func` - `(bodyPart: BodyPartObject, side?: left \| right) => {}` Callback called when a user tap a body part |
+| colors          | No       | `string[]` - Defaults to `['#0984e3', '#74b9ff']`                                                             |
+| side            | No       | `front \| back` - Defaults to `front`                                                                         |
+| gender          | No       | `string` - Can be "male" or "female", Defaults to `male`                                                      |
+| scale           | No       | `number` - Defaults to `1`                                                                                    |
+| border          | No       | `string` - Defaults to `#dfdfdf` (`none` to hide the border)                                                  |
 
 ## BodyPart object model
 
@@ -182,29 +170,28 @@ const styles = StyleSheet.create({
 
 ## List of body parts
 
-| BodyParts       | v2                 | v3                 | Side  |
-| --------------- | ------------------ | ------------------ | ----- |
-| trapezius       | :white_check_mark: | :white_check_mark: | Both  |
-| triceps         | :white_check_mark: | :white_check_mark: | Both  |
-| forearm         | :white_check_mark: | :white_check_mark: | Both  |
-| obliques        | :white_check_mark: | :white_check_mark: | Both  |
-| adductors       | :white_check_mark: | :white_check_mark: | Both  |
-| calves          | :white_check_mark: | :white_check_mark: | Both  |
-| head            | :white_check_mark: | :white_check_mark: | Both  |
-| neck            | :white_check_mark: | :white_check_mark: | Both  |
-| chest           | :white_check_mark: | :white_check_mark: | Front |
-| biceps          | :white_check_mark: | :white_check_mark: | Front |
-| abs             | :white_check_mark: | :white_check_mark: | Front |
-| upper-back      | :white_check_mark: | :white_check_mark: | Back  |
-| lower-back      | :white_check_mark: | :white_check_mark: | Back  |
-| hamstring       | :white_check_mark: | :white_check_mark: | Back  |
-| gluteal         | :white_check_mark: | :white_check_mark: | Back  |
-| deltoids        | :x:                | :white_check_mark: | Both  |
-| hands           | :x:                | :white_check_mark: | Both  |
-| feet            | :x:                | :white_check_mark: | Both  |
-| ankles          | :x:                | :white_check_mark: | Both  |
-| tibialis        | :x:                | :white_check_mark: | Both  |
-| adductor        | :white_check_mark: | :x:                | Both  |
-| front-deltoids  | :white_check_mark: | :x:                | Front |
-| abductors       | :white_check_mark: | :x:                | Front |
-| back-deltoids   | :white_check_mark: | :x:                | Back  |
+| BodyParts    | Side                         |
+| ------------ | ---------------------------- |
+| trapezius    | Both                         |
+| triceps      | Both                         |
+| forearm      | Both                         |
+| adductors    | Both                         |
+| calves       | Both                         |
+| hair         | Both                         |
+| neck         | Both                         |
+| deltoids     | Both                         |
+| hands        | Both                         |
+| feet         | Both                         |
+| head         | Both (Front only for female) |
+| ankles       | Both (Front only for female) |
+| tibialis     | Front                        |
+| obliques     | Front                        |
+| chest        | Front                        |
+| biceps       | Front                        |
+| abs          | Front                        |
+| quadriceps   | Front                        |
+| knees        | Front                        |
+| upper-back   | Back                         |
+| lower-back   | Back                         |
+| hamstring    | Back                         |
+| gluteal      | Back                         |
