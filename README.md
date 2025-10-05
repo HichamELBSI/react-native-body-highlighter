@@ -159,6 +159,14 @@ const styles = StyleSheet.create({
 
 ## BodyPart object model
 
+### Accessibility
+
+Each `<Body />` component and its SVG wrappers (`SvgMaleWrapper`, `SvgFemaleWrapper`) are now accessible to screen readers.
+
+- Default accessibility labels are automatically provided for gender and side (e.g., `"male-body-front"`, `"female-body-back"`).
+- This improves overall screen reader compatibility by making the visual body component identifiable.
+- Adding accessibility per individual body part would require a deeper refactor of how SVG paths are structured.
+
 - #### BodyPartObject: `{ slug: BodyPartName, intensity: IntensityNumber, side?: 'left' | 'right' }`
 
 - #### BodyPartName: Body part name to highlight (See the list of available body parts below)
