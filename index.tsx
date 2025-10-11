@@ -1,6 +1,6 @@
 import React, { memo, useCallback } from "react";
 import { Path } from "react-native-svg";
-import differenceWith from "ramda/src/differenceWith";
+import { differenceWith } from "./utils/differenceWith";
 
 import { bodyFront } from "./assets/bodyFront";
 import { bodyBack } from "./assets/bodyBack";
