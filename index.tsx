@@ -46,6 +46,7 @@ export interface BodyPart {
 }
 
 export interface ExtendedBodyPart extends BodyPart {
+  color?: string;
   intensity?: number;
   side?: "left" | "right";
 }
@@ -83,9 +84,14 @@ const Body = ({
 
       const coloredBodyParts = innerData.map((d) => {
         const bodyPart = data.find((e) => e.slug === d?.slug);
-        let colorIntensity = 1;
-        if (bodyPart?.intensity) colorIntensity = bodyPart.intensity;
-        return { ...d, color: colors[colorIntensity - 1] };
+
+        if (bodyPart?.color) {
+          return { ...d, color: bodyPart.color };
+        } else {
+          let colorIntensity = 1;
+          if (bodyPart?.intensity) colorIntensity = bodyPart.intensity;
+          return { ...d, color: colors[colorIntensity - 1] };
+        }
       });
 
       const formattedBodyParts = differenceWith(comparison, dataSource, data);
@@ -98,10 +104,10 @@ const Body = ({
   const getColorToFill = (bodyPart: ExtendedBodyPart) => {
     let color;
 
-    if (bodyPart.intensity) {
-      color = colors[bodyPart.intensity];
-    } else {
+    if (bodyPart.color) {
       color = bodyPart.color;
+    } else if (bodyPart.intensity && bodyPart.intensity > 0) {
+      color = colors[bodyPart.intensity];
     }
 
     return color;
