@@ -167,9 +167,11 @@ Each `<Body />` component and its SVG wrappers (`SvgMaleWrapper`, `SvgFemaleWrap
 - This improves overall screen reader compatibility by making the visual body component identifiable.
 - Adding accessibility per individual body part would require a deeper refactor of how SVG paths are structured.
 
-- #### BodyPartObject: `{ slug: BodyPartName, intensity: IntensityNumber, side?: 'left' | 'right' }`
+- #### BodyPartObject: `{ slug: BodyPartName, color: colorHexValue, intensity: IntensityNumber, side?: 'left' | 'right' }`
 
 - #### BodyPartName: Body part name to highlight (See the list of available body parts below)
+
+- #### colorHexValue: The Color of specific body part. Accepts HEX string. E.g `#ff0000ff`
 
 - #### IntensityNumber: Color intensity (if the `colors` property is set: from 1 to `colors.length` + 1. If not, intensity can be 1 or 2)
 
