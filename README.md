@@ -156,6 +156,8 @@ const styles = StyleSheet.create({
 | gender          | No       | `string` - Can be "male" or "female", Defaults to `male`                                                      |
 | scale           | No       | `number` - Defaults to `1`                                                                                    |
 | border          | No       | `string` - Defaults to `#dfdfdf` (`none` to hide the border)                                                  |
+| disabledParts   | No       | `Slug[]` - Contains array of Slugs to be disabled                                                  |
+| hiddenParts     | No       | `Slug[]` - Contains array of Slugs to be hidden (not rendered)                                                  |
 
 ## BodyPart object model
 
