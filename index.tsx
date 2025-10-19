@@ -59,6 +59,7 @@ export type BodyProps = {
   gender?: "male" | "female";
   onBodyPartPress?: (b: ExtendedBodyPart, side?: "left" | "right") => void;
   border?: string | "none";
+  disabledParts?: Slug[]
 };
 
 const comparison = (a: ExtendedBodyPart, b: ExtendedBodyPart) =>
@@ -72,6 +73,7 @@ const Body = ({
   gender = "male",
   onBodyPartPress,
   border = "#dfdfdf",
+  disabledParts = []
 }: BodyProps) => {
   const mergedBodyParts = useCallback(
     (dataSource: ReadonlyArray<BodyPart>) => {
@@ -104,6 +106,10 @@ const Body = ({
   const getColorToFill = (bodyPart: ExtendedBodyPart) => {
     let color;
 
+    if (disabledParts.includes(bodyPart.slug)) {
+      return "#EBEBE4";
+    }
+
     if (bodyPart.color) {
       color = bodyPart.color;
     } else if (bodyPart.intensity && bodyPart.intensity > 0) {
@@ -112,6 +118,8 @@ const Body = ({
 
     return color;
   };
+
+  const isPartDisabled = (slug?: Slug) => slug && disabledParts.includes(slug);
 
   const renderBodySvg = (bodyToRender: ReadonlyArray<BodyPart>) => {
     const SvgWrapper = gender === "male" ? SvgMaleWrapper : SvgFemaleWrapper;
@@ -126,7 +134,11 @@ const Body = ({
             return (
               <Path
                 key={path}
-                onPress={() => onBodyPartPress?.(bodyPart)}
+                onPress={
+                  isPartDisabled(bodyPart.slug)
+                    ? undefined
+                    : () => onBodyPartPress?.(bodyPart)
+                }
                 id={bodyPart.slug}
                 fill={
                   dataCommonPath ? getColorToFill(bodyPart) : bodyPart.color
@@ -143,7 +155,11 @@ const Body = ({
             return (
               <Path
                 key={path}
-                onPress={() => onBodyPartPress?.(bodyPart, "left")}
+                onPress={
+                  isPartDisabled(bodyPart.slug)
+                    ? undefined
+                    : () => onBodyPartPress?.(bodyPart, "left")
+                }
                 id={bodyPart.slug}
                 fill={isOnlyRight ? "#3f3f3f" : getColorToFill(bodyPart)}
                 d={path}
@@ -157,7 +173,11 @@ const Body = ({
             return (
               <Path
                 key={path}
-                onPress={() => onBodyPartPress?.(bodyPart, "right")}
+                onPress={
+                  isPartDisabled(bodyPart.slug)
+                    ? undefined
+                    : () => onBodyPartPress?.(bodyPart, "right")
+                }
                 id={bodyPart.slug}
                 fill={isOnlyLeft ? "#3f3f3f" : getColorToFill(bodyPart)}
                 d={path}
