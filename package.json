@@ -1,11 +1,12 @@
 {
   "name": "react-native-body-highlighter",
   "version": "3.1.3",
-  "main": "index.tsx",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "author": "HichamELBSI",
   "license": "MIT",
   "keywords": [
-    "reactnative",
+    "react-native",
     "react",
     "muscle",
     "muscles",
@@ -15,9 +16,16 @@
     "color",
     "svg"
   ],
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
   "scripts": {
+    "build": "tsc",
     "test": "jest",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "prepare": "yarn build"
   },
   "dependencies": {
     "react-native-svg": "^15.9.0"
@@ -33,5 +41,8 @@
     "react-native-typescript-transformer": "^1.2.13",
     "typescript": "^5.6.3"
   },
-  "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
+  "publishConfig": {
+    "access": "public"
+  },
+  "packageManager": "yarn@1.22.22"
 }
