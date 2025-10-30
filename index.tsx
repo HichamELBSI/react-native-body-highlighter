@@ -145,6 +145,7 @@ const Body = ({
                     ? undefined
                     : () => onBodyPartPress?.(bodyPart)
                 }
+                aria-disabled={isPartDisabled(bodyPart.slug)}
                 id={bodyPart.slug}
                 fill={
                   dataCommonPath ? getColorToFill(bodyPart) : bodyPart.color
