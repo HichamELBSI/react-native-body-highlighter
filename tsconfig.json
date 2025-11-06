@@ -4,6 +4,9 @@
     "module": "commonjs",
     "jsx": "react-native",
     "strict": true,
-    "esModuleInterop": true
-  }
+    "esModuleInterop": true,
+    "outDir": "./dist",
+    "declaration": true
+  },
+  "exclude": ["__tests__", "node_modules", "dist"]
 }
