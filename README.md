@@ -147,17 +147,20 @@ const styles = StyleSheet.create({
 
 ## Props
 
-| Prop            | Required | Purpose                                                                                                       |
-| --------------- | -------- | ------------------------------------------------------------------------------------------------------------- |
-| data            | Yes      | `BodyPartObject[]` - Array of `BodyPartObject` to highlight                                                   |
-| onBodyPartPress | No       | `Func` - `(bodyPart: BodyPartObject, side?: left \| right) => {}` Callback called when a user tap a body part |
-| colors          | No       | `string[]` - Defaults to `['#0984e3', '#74b9ff']`                                                             |
-| side            | No       | `front \| back` - Defaults to `front`                                                                         |
-| gender          | No       | `string` - Can be "male" or "female", Defaults to `male`                                                      |
-| scale           | No       | `number` - Defaults to `1`                                                                                    |
-| border          | No       | `string` - Defaults to `#dfdfdf` (`none` to hide the border)                                                  |
-| disabledParts   | No       | `Slug[]` - Contains array of Slugs to be disabled                                                  |
-| hiddenParts     | No       | `Slug[]` - Contains array of Slugs to be hidden (not rendered)                                                  |
+| Prop                | Required | Purpose                                                                                                       |
+| ------------------- | -------- | ------------------------------------------------------------------------------------------------------------- |
+| data                | Yes      | `BodyPartObject[]` - Array of `BodyPartObject` to highlight                                                   |
+| onBodyPartPress     | No       | `Func` - `(bodyPart: BodyPartObject, side?: left \| right) => {}` Callback called when a user tap a body part |
+| colors              | No       | `string[]` - Defaults to `['#0984e3', '#74b9ff']`                                                             |
+| side                | No       | `front \| back` - Defaults to `front`                                                                         |
+| gender              | No       | `string` - Can be "male" or "female", Defaults to `male`                                                      |
+| scale               | No       | `number` - Defaults to `1`                                                                                    |
+| border              | No       | `string` - Defaults to `#dfdfdf` (`none` to hide the border)                                                  |
+| disabledParts       | No       | `Slug[]` - Contains array of Slugs to be disabled                                                  |
+| hiddenParts         | No       | `Slug[]` - Contains array of Slugs to be hidden (not rendered)                                                  |
+| defaultFill         | No       | `string` - Default fill color for body parts. Defaults to `#3f3f3f`                                           |
+| defaultStroke       | No       | `string` - Default stroke color for body parts. Defaults to `none`                                            |
+| defaultStrokeWidth  | No       | `number` - Default stroke width for body parts. Defaults to `0`                                               |
 
 ## BodyPart object model
 
@@ -169,7 +172,7 @@ Each `<Body />` component and its SVG wrappers (`SvgMaleWrapper`, `SvgFemaleWrap
 - This improves overall screen reader compatibility by making the visual body component identifiable.
 - Adding accessibility per individual body part would require a deeper refactor of how SVG paths are structured.
 
-- #### BodyPartObject: `{ slug: BodyPartName, color: colorHexValue, intensity: IntensityNumber, side?: 'left' | 'right' }`
+- #### BodyPartObject: `{ slug: BodyPartName, color?: colorHexValue, intensity?: IntensityNumber, side?: 'left' | 'right', styles?: BodyPartStyles }`
 
 - #### BodyPartName: Body part name to highlight (See the list of available body parts below)
 
@@ -178,6 +181,18 @@ Each `<Body />` component and its SVG wrappers (`SvgMaleWrapper`, `SvgFemaleWrap
 - #### IntensityNumber: Color intensity (if the `colors` property is set: from 1 to `colors.length` + 1. If not, intensity can be 1 or 2)
 
 - #### Side (optional): Can be `left`, `right`. Useful for selecting a single part or a pair (Do not set the side if you need to select the pair)
+
+- #### BodyPartStyles (optional): Custom styling object for individual body parts
+  - `fill?: string` - Custom fill color for this specific body part (overrides color and intensity)
+  - `stroke?: string` - Custom stroke color for this specific body part
+  - `strokeWidth?: number` - Custom stroke width for this specific body part
+
+### Styling Priority
+The fill color for each body part is determined in the following priority order (highest to lowest):
+1. `styles.fill` - Per-part custom fill style
+2. `color` - Per-part color property
+3. `intensity` - Color from the `colors` array based on intensity value
+4. `defaultFill` - Global default fill color
 
 ## List of body parts
 

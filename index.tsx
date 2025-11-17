@@ -35,6 +35,12 @@ export type Slug =
   | "triceps"
   | "upper-back";
 
+export interface BodyPartStyles {
+  fill?: string;
+  stroke?: string;
+  strokeWidth?: number;
+}
+
 export interface BodyPart {
   color?: string;
   slug?: Slug;
@@ -49,6 +55,7 @@ export interface ExtendedBodyPart extends BodyPart {
   color?: string;
   intensity?: number;
   side?: "left" | "right";
+  styles?: BodyPartStyles;
 }
 
 export type BodyProps = {
@@ -61,6 +68,9 @@ export type BodyProps = {
   border?: string | "none";
   disabledParts?: Slug[];
   hiddenParts?: Slug[];
+  defaultFill?: string;
+  defaultStroke?: string;
+  defaultStrokeWidth?: number;
 };
 
 const comparison = (a: ExtendedBodyPart, b: ExtendedBodyPart) =>
@@ -75,54 +85,86 @@ const Body = ({
   onBodyPartPress,
   border = "#dfdfdf",
   disabledParts = [],
-  hiddenParts = []
+  hiddenParts = [],
+  defaultFill = "#3f3f3f",
+  defaultStroke = "none",
+  defaultStrokeWidth = 0
 }: BodyProps) => {
+  const getPartStyles = useCallback(
+    (bodyPart: ExtendedBodyPart): BodyPartStyles => {
+      // Per-part styles override global defaults
+      return {
+        fill: bodyPart.styles?.fill ?? defaultFill,
+        stroke: bodyPart.styles?.stroke ?? defaultStroke,
+        strokeWidth: bodyPart.styles?.strokeWidth ?? defaultStrokeWidth,
+      };
+    },
+    [defaultFill, defaultStroke, defaultStrokeWidth]
+  );
+
   const mergedBodyParts = useCallback(
     (dataSource: ReadonlyArray<BodyPart>) => {
       const filteredDataSource = dataSource.filter(
         (part) => !hiddenParts.includes(part.slug!)
       );
 
-      const innerData = data
-        .map((d) => {
-          let foundedBodyPart = filteredDataSource.find((e) => e.slug === d.slug);
-          return foundedBodyPart;
-        })
-        .filter(Boolean);
-
-      const coloredBodyParts = innerData.map((d) => {
-        const bodyPart = data.find((e) => e.slug === d?.slug);
-
-        if (bodyPart?.color) {
-          return { ...d, color: bodyPart.color };
-        } else {
-          let colorIntensity = 1;
-          if (bodyPart?.intensity) colorIntensity = bodyPart.intensity;
-          return { ...d, color: colors[colorIntensity - 1] };
+      // Create a map of user data by slug for faster lookup
+      const userDataMap = new Map<string, ExtendedBodyPart>();
+      data.forEach(userPart => {
+        if (userPart.slug) {
+          userDataMap.set(userPart.slug, userPart);
         }
       });
 
-      const formattedBodyParts = differenceWith(comparison, filteredDataSource, data);
+      // Merge asset body parts with user data
+      return filteredDataSource.map((assetPart): ExtendedBodyPart => {
+        const userPart = userDataMap.get(assetPart.slug!);
 
-      return [...formattedBodyParts, ...coloredBodyParts];
+        if (!userPart) {
+          // No user data for this part, return as-is
+          return assetPart;
+        }
+
+        // Merge asset part (has path) with user part (has styles, color, etc.)
+        const merged: ExtendedBodyPart = {
+          ...assetPart,
+          // Explicitly copy user properties
+          styles: userPart.styles,
+          intensity: userPart.intensity,
+          side: userPart.side,
+          color: userPart.color,
+        };
+
+        // Set color fallback based on intensity if provided
+        if (!merged.styles?.fill && !merged.color && merged.intensity) {
+          merged.color = colors[merged.intensity - 1];
+        }
+
+        return merged;
+      });
     },
     [data, colors, hiddenParts]
   );
 
   const getColorToFill = (bodyPart: ExtendedBodyPart) => {
-    let color;
-
-    if (disabledParts.includes(bodyPart.slug)) {
+    if (bodyPart.slug && disabledParts.includes(bodyPart.slug)) {
       return "#EBEBE4";
     }
 
-    if (bodyPart.color) {
-      color = bodyPart.color;
-    } else if (bodyPart.intensity && bodyPart.intensity > 0) {
-      color = colors[bodyPart.intensity];
+    // Priority: per-part styles.fill > color prop > intensity-based color > default
+    if (bodyPart.styles?.fill) {
+      return bodyPart.styles.fill;
     }
 
-    return color;
+    if (bodyPart.color) {
+      return bodyPart.color;
+    }
+
+    if (bodyPart.intensity && bodyPart.intensity > 0) {
+      return colors[bodyPart.intensity - 1];
+    }
+
+    return undefined; // Let getPartStyles provide the default
   };
 
   const isPartDisabled = (slug?: Slug) => slug && disabledParts.includes(slug);
@@ -134,8 +176,8 @@ const Body = ({
       <SvgWrapper side={side} scale={scale} border={border}>
         {mergedBodyParts(bodyToRender).map((bodyPart: ExtendedBodyPart) => {
           const commonPaths = (bodyPart.path?.common || []).map((path) => {
-            const dataCommonPath = data.find((d) => d.slug === bodyPart.slug)
-              ?.path?.common;
+            const partStyles = getPartStyles(bodyPart);
+            const fillColor = getColorToFill(bodyPart);
 
             return (
               <Path
@@ -147,9 +189,9 @@ const Body = ({
                 }
                 aria-disabled={isPartDisabled(bodyPart.slug)}
                 id={bodyPart.slug}
-                fill={
-                  dataCommonPath ? getColorToFill(bodyPart) : bodyPart.color
-                }
+                fill={fillColor ?? partStyles.fill}
+                stroke={partStyles.stroke}
+                strokeWidth={partStyles.strokeWidth}
                 d={path}
               />
             );
@@ -158,6 +200,8 @@ const Body = ({
           const leftPaths = (bodyPart.path?.left || []).map((path) => {
             const isOnlyRight =
               data.find((d) => d.slug === bodyPart.slug)?.side === "right";
+            const partStyles = getPartStyles(bodyPart);
+            const fillColor = isOnlyRight ? defaultFill : getColorToFill(bodyPart);
 
             return (
               <Path
@@ -168,7 +212,9 @@ const Body = ({
                     : () => onBodyPartPress?.(bodyPart, "left")
                 }
                 id={bodyPart.slug}
-                fill={isOnlyRight ? "#3f3f3f" : getColorToFill(bodyPart)}
+                fill={fillColor ?? partStyles.fill}
+                stroke={partStyles.stroke}
+                strokeWidth={partStyles.strokeWidth}
                 d={path}
               />
             );
@@ -176,6 +222,8 @@ const Body = ({
           const rightPaths = (bodyPart.path?.right || []).map((path) => {
             const isOnlyLeft =
               data.find((d) => d.slug === bodyPart.slug)?.side === "left";
+            const partStyles = getPartStyles(bodyPart);
+            const fillColor = isOnlyLeft ? defaultFill : getColorToFill(bodyPart);
 
             return (
               <Path
@@ -186,7 +234,9 @@ const Body = ({
                     : () => onBodyPartPress?.(bodyPart, "right")
                 }
                 id={bodyPart.slug}
-                fill={isOnlyLeft ? "#3f3f3f" : getColorToFill(bodyPart)}
+                fill={fillColor ?? partStyles.fill}
+                stroke={partStyles.stroke}
+                strokeWidth={partStyles.strokeWidth}
                 d={path}
               />
             );
