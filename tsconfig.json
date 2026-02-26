@@ -6,7 +6,9 @@
     "strict": true,
     "esModuleInterop": true,
     "outDir": "./dist",
-    "declaration": true
+    "declaration": true,
+    "lib": ["es6"],
+    "skipLibCheck": true
   },
   "exclude": ["__tests__", "node_modules", "dist"]
 }

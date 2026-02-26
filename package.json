@@ -22,7 +22,8 @@
     "LICENSE"
   ],
   "scripts": {
-    "build": "tsc",
+    "clean": "rm -rf dist",
+    "build": "yarn clean && tsc",
     "test": "jest",
     "prepare": "yarn build",
     "typecheck": "tsc --noEmit"
