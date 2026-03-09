@@ -217,6 +217,7 @@ The fill color for each body part is determined in the following priority order 
 | abs          | Front                        |
 | quadriceps   | Front                        |
 | knees        | Front                        |
+| abductors    | Back                         |
 | upper-back   | Back                         |
 | lower-back   | Back                         |
 | hamstring    | Back                         |
