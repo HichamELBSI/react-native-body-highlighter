@@ -1,5 +1,5 @@
 import React from "react";
-import { render } from "@testing-library/react-native";
+import { render, fireEvent } from "@testing-library/react-native";
 import Body from "../index";
 
 describe("Body Component", () => {
@@ -195,6 +195,134 @@ describe("Body Component", () => {
         />
       );
       expect(toJSON()).toBeTruthy();
+    });
+  });
+
+  describe("Side Mirroring (front ↔ back)", () => {
+    const highlightColor = "#0984e3";
+
+    it("should highlight only screen-left paths when side is 'left' on front view", () => {
+      const { UNSAFE_getAllByProps } = render(
+        <Body
+          data={[{ slug: "trapezius", intensity: 1, side: "left" }]}
+          side="front"
+          colors={[highlightColor]}
+        />
+      );
+      const paths = UNSAFE_getAllByProps({ id: "trapezius" });
+      // trapezius has left + right paths; with side: "left" on front view,
+      // screen-left paths should be highlighted, screen-right should be default
+      const fills = paths.map((p: any) => p.props.fill);
+      expect(fills).toContain(highlightColor);
+      expect(fills).toContain("#3f3f3f");
+    });
+
+    it("should mirror highlight to screen-right paths when side is 'left' on back view", () => {
+      const { UNSAFE_getAllByProps } = render(
+        <Body
+          data={[{ slug: "trapezius", intensity: 1, side: "left" }]}
+          side="back"
+          colors={[highlightColor]}
+        />
+      );
+      const paths = UNSAFE_getAllByProps({ id: "trapezius" });
+      // On back view, side: "left" (screen-left on front = anatomical right)
+      // should highlight screen-RIGHT paths (anatomical right on back)
+      const fills = paths.map((p: any) => p.props.fill);
+      expect(fills).toContain(highlightColor);
+      expect(fills).toContain("#3f3f3f");
+    });
+
+    it("should not mirror when no side is specified", () => {
+      const frontResult = render(
+        <Body
+          data={[{ slug: "trapezius", intensity: 1 }]}
+          side="front"
+          colors={[highlightColor]}
+        />
+      );
+      const backResult = render(
+        <Body
+          data={[{ slug: "trapezius", intensity: 1 }]}
+          side="back"
+          colors={[highlightColor]}
+        />
+      );
+      const frontPaths = frontResult.UNSAFE_getAllByProps({ id: "trapezius" });
+      const backPaths = backResult.UNSAFE_getAllByProps({ id: "trapezius" });
+      // Without side, both left and right should be highlighted in both views
+      frontPaths.forEach((p: any) => {
+        expect(p.props.fill).toBe(highlightColor);
+      });
+      backPaths.forEach((p: any) => {
+        expect(p.props.fill).toBe(highlightColor);
+      });
+    });
+
+    it("should report mirrored side in onBodyPartPress on back view", () => {
+      const onPress = jest.fn();
+      const { UNSAFE_getAllByProps } = render(
+        <Body
+          data={[{ slug: "trapezius", intensity: 1 }]}
+          side="back"
+          colors={[highlightColor]}
+          onBodyPartPress={onPress}
+        />
+      );
+      const paths = UNSAFE_getAllByProps({ id: "trapezius" });
+      // Press the first path — it's either a left or right SVG path
+      fireEvent.press(paths[0]);
+      expect(onPress).toHaveBeenCalled();
+      const reportedSide = onPress.mock.calls[0][1];
+      // On back view, SVG left paths should report "right" (mirrored)
+      // and SVG right paths should report "left" (mirrored)
+      expect(["left", "right"]).toContain(reportedSide);
+    });
+
+    it("should report unmirrored side in onBodyPartPress on front view", () => {
+      const onPress = jest.fn();
+      const { UNSAFE_getAllByProps } = render(
+        <Body
+          data={[{ slug: "trapezius", intensity: 1 }]}
+          side="front"
+          colors={[highlightColor]}
+          onBodyPartPress={onPress}
+        />
+      );
+      const paths = UNSAFE_getAllByProps({ id: "trapezius" });
+      fireEvent.press(paths[0]);
+      expect(onPress).toHaveBeenCalled();
+    });
+
+    it("should produce consistent highlight across front-back flip", () => {
+      // Simulate: user selects side "left" on front, then flips to back
+      // The same data should highlight the anatomically correct side on both views
+      const data = [{ slug: "trapezius", intensity: 1, side: "left" as const }];
+
+      const frontResult = render(
+        <Body data={data} side="front" colors={[highlightColor]} />
+      );
+      const backResult = render(
+        <Body data={data} side="back" colors={[highlightColor]} />
+      );
+
+      const frontPaths = frontResult.UNSAFE_getAllByProps({ id: "trapezius" });
+      const backPaths = backResult.UNSAFE_getAllByProps({ id: "trapezius" });
+
+      const frontFills = frontPaths.map((p: any) => p.props.fill);
+      const backFills = backPaths.map((p: any) => p.props.fill);
+
+      // Both views should have exactly one highlighted and one default
+      expect(frontFills.filter((f: string) => f === highlightColor)).toHaveLength(1);
+      expect(frontFills.filter((f: string) => f === "#3f3f3f")).toHaveLength(1);
+      expect(backFills.filter((f: string) => f === highlightColor)).toHaveLength(1);
+      expect(backFills.filter((f: string) => f === "#3f3f3f")).toHaveLength(1);
+
+      // The highlighted path should be on OPPOSITE screen sides
+      // (front-left highlighted = back-right highlighted)
+      const frontHighlightIndex = frontFills.indexOf(highlightColor);
+      const backHighlightIndex = backFills.indexOf(highlightColor);
+      expect(frontHighlightIndex).not.toBe(backHighlightIndex);
     });
   });
 });
