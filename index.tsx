@@ -198,8 +198,9 @@ const Body = ({
           });
 
           const leftPaths = (bodyPart.path?.left || []).map((path) => {
+            const dataSide = data.find((d) => d.slug === bodyPart.slug)?.side;
             const isOnlyRight =
-              data.find((d) => d.slug === bodyPart.slug)?.side === "right";
+              dataSide === (side === "back" ? "left" : "right");
             const partStyles = getPartStyles(bodyPart);
             const fillColor = isOnlyRight ? defaultFill : getColorToFill(bodyPart);
 
@@ -209,7 +210,7 @@ const Body = ({
                 onPress={
                   isPartDisabled(bodyPart.slug)
                     ? undefined
-                    : () => onBodyPartPress?.(bodyPart, "left")
+                    : () => onBodyPartPress?.(bodyPart, side === "back" ? "right" : "left")
                 }
                 id={bodyPart.slug}
                 fill={fillColor ?? partStyles.fill}
@@ -220,8 +221,9 @@ const Body = ({
             );
           });
           const rightPaths = (bodyPart.path?.right || []).map((path) => {
+            const dataSide = data.find((d) => d.slug === bodyPart.slug)?.side;
             const isOnlyLeft =
-              data.find((d) => d.slug === bodyPart.slug)?.side === "left";
+              dataSide === (side === "back" ? "right" : "left");
             const partStyles = getPartStyles(bodyPart);
             const fillColor = isOnlyLeft ? defaultFill : getColorToFill(bodyPart);
 
@@ -231,7 +233,7 @@ const Body = ({
                 onPress={
                   isPartDisabled(bodyPart.slug)
                     ? undefined
-                    : () => onBodyPartPress?.(bodyPart, "right")
+                    : () => onBodyPartPress?.(bodyPart, side === "back" ? "left" : "right")
                 }
                 id={bodyPart.slug}
                 fill={fillColor ?? partStyles.fill}
